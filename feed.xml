@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2022-06-04T13:23:03+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Setting up Azure API Management with Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Setting up Azure API Management with Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-04T12:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
+However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons.</p>
+
+<p>The setup used to be somewhat convoluted, but is now  much simpler.
+This post will walk you through the steps needed for setting it up manually, while a later post will detail how to automate it though a DevOps pipeline.</p>
+
+<h2 id="1-create-the-api-management-service">1. Create the API Management service</h2>
+
+<p>The first step is to install the API Management gateway, so head over to the Azure portal and create a new API Management service.</p>
+
+<p>There aren’t many options that needs to be configured, but make sure to enable <em>System assigned managed identity</em> as it will be used to connect to the Dynamics 365 instance.</p>
+
+<p><img src="Install-API-Management-gateway.png" alt="Install API Management gateway - Managed identity" /></p>
+
+<h2 id="2-create-an-app-user">2. Create an app user</h2>
+
+<p>The next step is to create an app user for the managed identity, in the environment it should have access to.</p>
+
+<p>First we need the <strong>Object ID</strong> for the Managed Identity. This can be found on <em>Security -&gt; Managed identities -&gt; System assigned</em>:</p>
+
+<p><img src="mi-object-id.png" alt="Object Id for Managed Identity" /></p>
+
+<p>Then go to <em>Azure Active Directory -&gt; Enterprise Applications</em> and search for this Object ID to find the <strong>Application ID</strong>:
+<img src="ea-application-id.png" alt="Application ID for Managed Identity" /></p>
+
+<hr />
+
+<p>Head over to the <a href="https://admin.powerplatform.microsoft.com">Power Platform admin center</a>, open the environment which APIM should get access to, and click <em>S2s Apps -&gt; See all</em>:
+<img src="s2s-apps.png" alt="Enviroment details" /></p>
+
+<p>Click <em>New app user</em>:
+<img src="new-app-user.png" alt="New app user" /></p>
+
+<p>In the <em>Create a new app user</em> dialog, Click <em>Add an app</em> and search for the <strong>Application ID</strong>, select to app and click <em>Add</em>:
+<img src="add-app-from-aad.png" alt="Search for Application ID" /></p>
+
+<p>Select a <em>Business unit</em>, add <em>Security roles</em> and click <em>Create</em>:
+<img src="create-a-new-app-user.png" alt="Create a new app user" /></p>
+
+<p><em>I recommend creating a separate security role for APIM, but that is outside the scope of this post.</em></p>
+
+<h2 id="3-creating-an-api-and-operation">3. Creating an API and operation</h2>
+
+<p>To test the connection we need to create a new API with an operation that calls the Dynamics 365 REST API.</p>
+
+<p>Open the API Management service from the Azure portal, select: <em>APIs -&gt;  Add API -&gt; HTTP</em>:
+<img src="define-new-api.png" alt="APIM - Define new API" /></p>
+
+<p>Select <em>Full</em>, Give the API a <em>Display name</em> (and <em>name</em>) and set the <em>Web service URL</em> to the REST API url of your dynamics instance:
+<img src="create-an-http-api.png" alt="Create HTTP API" /></p>
+
+<p>From the API click <em>Add an operation</em> and fill in the <em>Display name</em>, <em>name</em> and <em>URL</em> and click <em>Save</em>.
+The existing <a href="https://docs.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/whoami">WhoAmI</a> function is used as example here:</p>
+
+<p><img src="add-operation.png" alt="Add WhoAmI operation" />
+Note: the URL is case sensitive.</p>
+
+<p>The final step is now to tell APIM to authenticate with its managed identity.</p>
+
+<p>Open the Policy editor for the WhoAmI operation:
+<img src="edit-policy.png" alt="" /></p>
+
+<p>Add a <a href="https://docs.microsoft.com/en-us/azure/api-management/api-management-authentication-policies">authentication-managed-identity</a> policy to the inbound section with the <em>resource</em> attribute set to URI of you dynamics instance and save:
+<img src="policy-editor.png" alt="" /></p>
+
+<h2 id="4-testing-the-api-endpoint-operation">4. Testing the API Endpoint operation</h2>
+
+<p>You should now be able to test the WhoAmI operation using the <em>Test</em> section:
+<img src="test-operation.png" alt="" /></p>
+
+<p>Hopefully you will receive a positive 200 OK response.</p>
+<h1>🥳</h1>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="APIM" /><category term="Dynamics 365" /><category term="Power Platform" /><category term="Managed Identity" /><summary type="html"><![CDATA[Short and simple guide on how to connect APIM to Dynamics 365 using managed identities and creating your first API endpoint.]]></summary></entry></feed>
