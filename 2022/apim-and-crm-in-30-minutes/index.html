@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Setting up Azure API Management with Dynamics 365 in 30 minutes - jjohnsen.github.io</title>
+<!-- begin _includes/seo.html --><title>Get started with Azure API Management and Dynamics 365 in 30 minutes - jjohnsen.github.io</title>
 <meta name="description" content="Short and simple guide on how to connect APIM to Dynamics 365 using managed identities and creating your first API endpoint.">
 
 
@@ -22,7 +22,7 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="nb_NO">
 <meta property="og:site_name" content="jjohnsen.github.io">
-<meta property="og:title" content="Setting up Azure API Management with Dynamics 365 in 30 minutes">
+<meta property="og:title" content="Get started with Azure API Management and Dynamics 365 in 30 minutes">
 <meta property="og:url" content="/2022/apim-and-crm-in-30-minutes/">
 
 
@@ -263,7 +263,7 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Setting up Azure API Management with Dynamics 365 in 30 minutes">
+    <meta itemprop="headline" content="Get started with Azure API Management and Dynamics 365 in 30 minutes">
     <meta itemprop="description" content="Dynamics 365 comes with a robust and powerful REST API out of the box.However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons.">
     <meta itemprop="datePublished" content="2022-06-02T00:00:00+02:00">
     <meta itemprop="dateModified" content="2022-06-04T12:00:00+02:00">
@@ -271,7 +271,7 @@
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Setting up Azure API Management with Dynamics 365 in 30 minutes
+          <h1 id="page-title" class="page__title" itemprop="headline">Get started with Azure API Management and Dynamics 365 in 30 minutes
 </h1>
           
 
@@ -309,7 +309,7 @@
           <aside class="sidebar__right ">
             <nav class="toc">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#1-create-the-api-management-service">1. Create the API Management service</a></li><li><a href="#2-create-an-app-user">2. Create an app user</a></li><li><a href="#3-creating-an-api-and-operation">3. Creating an API and operation</a></li><li><a href="#4-testing-the-api-endpoint-operation">4. Testing the API Endpoint operation</a></li></ul>
+              <ul class="toc__menu"><li><a href="#1-create-the-api-management-service">1. Create the API Management service</a></li><li><a href="#2-create-an-app-user">2. Create an app user</a></li><li><a href="#3-creating-an-api-and-operation">3. Creating an API and operation</a></li><li><a href="#4-testing-the-api-operation">4. Testing the API operation</a></li></ul>
 
             </nav>
           </aside>
@@ -341,7 +341,7 @@ This post will walk you through the steps needed for setting it up manually, whi
 
 <hr />
 
-<p>Head over to the <a href="https://admin.powerplatform.microsoft.com">Power Platform admin center</a>, open the environment which APIM should get access to, and click <em>S2s Apps -&gt; See all</em>:
+<p>Head over to the <a href="https://admin.powerplatform.microsoft.com">Power Platform admin center</a>, open the environment that APIM should get access to, click <em>S2s Apps -&gt; See all</em>:
 <img src="s2s-apps.png" alt="Enviroment details" /></p>
 
 <p>Click <em>New app user</em>:
@@ -379,7 +379,7 @@ Note: the URL is case sensitive.</p>
 <p>Add a <a href="https://docs.microsoft.com/en-us/azure/api-management/api-management-authentication-policies">authentication-managed-identity</a> policy to the inbound section with the <em>resource</em> attribute set to URI of you dynamics instance and save:
 <img src="policy-editor.png" alt="" /></p>
 
-<h2 id="4-testing-the-api-endpoint-operation">4. Testing the API Endpoint operation</h2>
+<h2 id="4-testing-the-api-operation">4. Testing the API operation</h2>
 
 <p>You should now be able to test the WhoAmI operation using the <em>Test</em> section:
 <img src="test-operation.png" alt="" /></p>

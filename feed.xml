@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2022-06-04T16:58:15+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Setting up Azure API Management with Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Setting up Azure API Management with Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-04T12:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2022-06-07T08:09:48+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Get started with Azure API Management and Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Get started with Azure API Management and Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-04T12:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
 However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons.</p>
 
 <p>The setup used to be somewhat convoluted, but is now  much simpler.
@@ -25,7 +25,7 @@ This post will walk you through the steps needed for setting it up manually, whi
 
 <hr />
 
-<p>Head over to the <a href="https://admin.powerplatform.microsoft.com">Power Platform admin center</a>, open the environment which APIM should get access to, and click <em>S2s Apps -&gt; See all</em>:
+<p>Head over to the <a href="https://admin.powerplatform.microsoft.com">Power Platform admin center</a>, open the environment that APIM should get access to, click <em>S2s Apps -&gt; See all</em>:
 <img src="s2s-apps.png" alt="Enviroment details" /></p>
 
 <p>Click <em>New app user</em>:
@@ -63,7 +63,7 @@ Note: the URL is case sensitive.</p>
 <p>Add a <a href="https://docs.microsoft.com/en-us/azure/api-management/api-management-authentication-policies">authentication-managed-identity</a> policy to the inbound section with the <em>resource</em> attribute set to URI of you dynamics instance and save:
 <img src="policy-editor.png" alt="" /></p>
 
-<h2 id="4-testing-the-api-endpoint-operation">4. Testing the API Endpoint operation</h2>
+<h2 id="4-testing-the-api-operation">4. Testing the API operation</h2>
 
 <p>You should now be able to test the WhoAmI operation using the <em>Test</em> section:
 <img src="test-operation.png" alt="" /></p>
