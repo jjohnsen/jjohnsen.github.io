@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>Get started with Azure API Management and Dynamics 365 in 30 minutes - jjohnsen.github.io</title>
-<meta name="description" content="Short and simple guide on how to connect APIM to Dynamics 365 using managed identities and creating your first API endpoint.">
+<meta name="description" content="Short and simple guide on how to connect APIM to Dynamics 365, using managed identities, and creating your first API endpoint.">
 
 
   <meta name="author" content="Jan-Åge Johnsen">
@@ -26,9 +26,11 @@
 <meta property="og:url" content="/2022/apim-and-crm-in-30-minutes/">
 
 
-  <meta property="og:description" content="Short and simple guide on how to connect APIM to Dynamics 365 using managed identities and creating your first API endpoint.">
+  <meta property="og:description" content="Short and simple guide on how to connect APIM to Dynamics 365, using managed identities, and creating your first API endpoint.">
 
 
+
+  <meta property="og:image" content="/assets/images/apim-power-platform-header.jpg">
 
 
 
@@ -38,7 +40,7 @@
 
 
 
-  <meta property="article:modified_time" content="2022-06-04T12:00:00+02:00">
+  <meta property="article:modified_time" content="2022-06-07T00:00:00+02:00">
 
 
 
@@ -124,6 +126,11 @@
         </a>
         <ul class="visible-links"></ul>
         
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">Toggle menu</span>
           <div class="navicon"></div>
@@ -137,6 +144,65 @@
 
     <div class="initial-content">
       
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('/assets/images/apim-power-platform-header.jpg');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Get started with Azure API Management and Dynamics 365 in 30 minutes
+
+        
+      </h1>
+      
+        <p class="page__lead">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
+</p>
+      
+      
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-06-02T00:00:00+02:00">June 2, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
 
 
 
@@ -264,49 +330,16 @@
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="Get started with Azure API Management and Dynamics 365 in 30 minutes">
-    <meta itemprop="description" content="Dynamics 365 comes with a robust and powerful REST API out of the box.However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons.">
+    <meta itemprop="description" content="Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.">
     <meta itemprop="datePublished" content="2022-06-02T00:00:00+02:00">
-    <meta itemprop="dateModified" content="2022-06-04T12:00:00+02:00">
+    <meta itemprop="dateModified" content="2022-06-07T00:00:00+02:00">
 
     <div class="page__inner-wrap">
-      
-        <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">Get started with Azure API Management and Dynamics 365 in 30 minutes
-</h1>
-          
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        
-        <time datetime="2022-06-02T00:00:00+02:00">June 2, 2022</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
-        
-          2 minute read
-        
-      </span>
-    
-  </p>
-
-
-        </header>
       
 
       <section class="page__content" itemprop="text">
         
-          <aside class="sidebar__right ">
+          <aside class="sidebar__right sticky">
             <nav class="toc">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
               <ul class="toc__menu"><li><a href="#1-create-the-api-management-service">1. Create the API Management service</a></li><li><a href="#2-create-an-app-user">2. Create an app user</a></li><li><a href="#3-creating-an-api-and-operation">3. Creating an API and operation</a></li><li><a href="#4-testing-the-api-operation">4. Testing the API operation</a></li></ul>
@@ -345,7 +378,7 @@ This post will walk you through the steps needed for setting it up manually, whi
 <img src="s2s-apps.png" alt="Enviroment details" /></p>
 
 <p>Click <em>New app user</em>:
-<img src="new-app-user.png" alt="New app user" /></p>
+<img src="new-app-user.png" alt="New app user" class="align-center" /></p>
 
 <p>In the <em>Create a new app user</em> dialog, Click <em>Add an app</em> and search for the <strong>Application ID</strong>, select to app and click <em>Add</em>:
 <img src="add-app-from-aad.png" alt="Search for Application ID" /></p>
@@ -359,11 +392,13 @@ This post will walk you through the steps needed for setting it up manually, whi
 
 <p>To test the connection we need to create a new API with an operation that calls the Dynamics 365 REST API.</p>
 
-<p>Open the API Management service from the Azure portal, select: <em>APIs -&gt;  Add API -&gt; HTTP</em>:
-<img src="define-new-api.png" alt="APIM - Define new API" /></p>
+<p>Open the API Management service from the Azure portal, select: <em>APIs -&gt;  Add API -&gt; HTTP</em>:</p>
 
-<p>Select <em>Full</em>, Give the API a <em>Display name</em> (and <em>name</em>) and set the <em>Web service URL</em> to the REST API url of your dynamics instance:
-<img src="create-an-http-api.png" alt="Create HTTP API" /></p>
+<p><img src="define-new-api.png" alt="APIM - Define new API" /></p>
+
+<p>Select <em>Full</em>, Give the API a <em>Display name</em> (and <em>name</em>) and set the <em>Web service URL</em> to the REST API url of your dynamics instance:</p>
+
+<p><img src="create-an-http-api.png" alt="Create HTTP API" /></p>
 
 <p>From the API click <em>Add an operation</em> and fill in the <em>Display name</em>, <em>name</em> and <em>URL</em> and click <em>Save</em>.
 The existing <a href="https://docs.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/whoami">WhoAmI</a> function is used as example here:</p>
@@ -417,7 +452,7 @@ Note: the URL is case sensitive.</p>
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-06-04">June 4, 2022</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-06-07">June 7, 2022</time></p>
 
 
       </footer>
@@ -445,6 +480,17 @@ Note: the URL is case sensitive.</p>
 
     </div>
 
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
     
 
     <div id="footer" class="page__footer">
@@ -488,6 +534,10 @@ Note: the URL is case sensitive.</p>
 
 
 
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
 
 
 

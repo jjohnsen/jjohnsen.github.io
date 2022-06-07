@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2022-06-07T08:09:48+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Get started with Azure API Management and Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Get started with Azure API Management and Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-04T12:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2022-06-07T10:35:26+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Get started with Azure API Management and Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Get started with Azure API Management and Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-07T00:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
 However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons.</p>
 
 <p>The setup used to be somewhat convoluted, but is now  much simpler.
@@ -29,7 +29,7 @@ This post will walk you through the steps needed for setting it up manually, whi
 <img src="s2s-apps.png" alt="Enviroment details" /></p>
 
 <p>Click <em>New app user</em>:
-<img src="new-app-user.png" alt="New app user" /></p>
+<img src="new-app-user.png" alt="New app user" class="align-center" /></p>
 
 <p>In the <em>Create a new app user</em> dialog, Click <em>Add an app</em> and search for the <strong>Application ID</strong>, select to app and click <em>Add</em>:
 <img src="add-app-from-aad.png" alt="Search for Application ID" /></p>
@@ -43,11 +43,13 @@ This post will walk you through the steps needed for setting it up manually, whi
 
 <p>To test the connection we need to create a new API with an operation that calls the Dynamics 365 REST API.</p>
 
-<p>Open the API Management service from the Azure portal, select: <em>APIs -&gt;  Add API -&gt; HTTP</em>:
-<img src="define-new-api.png" alt="APIM - Define new API" /></p>
+<p>Open the API Management service from the Azure portal, select: <em>APIs -&gt;  Add API -&gt; HTTP</em>:</p>
 
-<p>Select <em>Full</em>, Give the API a <em>Display name</em> (and <em>name</em>) and set the <em>Web service URL</em> to the REST API url of your dynamics instance:
-<img src="create-an-http-api.png" alt="Create HTTP API" /></p>
+<p><img src="define-new-api.png" alt="APIM - Define new API" /></p>
+
+<p>Select <em>Full</em>, Give the API a <em>Display name</em> (and <em>name</em>) and set the <em>Web service URL</em> to the REST API url of your dynamics instance:</p>
+
+<p><img src="create-an-http-api.png" alt="Create HTTP API" /></p>
 
 <p>From the API click <em>Add an operation</em> and fill in the <em>Display name</em>, <em>name</em> and <em>URL</em> and click <em>Save</em>.
 The existing <a href="https://docs.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/whoami">WhoAmI</a> function is used as example here:</p>
@@ -68,4 +70,4 @@ Note: the URL is case sensitive.</p>
 <p>You should now be able to test the WhoAmI operation using the <em>Test</em> section:
 <img src="test-operation.png" alt="" /></p>
 
-<p>Assuming everything went according to the plan, you should receive a 200 OK response, and be ready to crank out your own API! 🥳</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="APIM" /><category term="Dynamics 365" /><category term="Power Platform" /><category term="Managed Identity" /><summary type="html"><![CDATA[Short and simple guide on how to connect APIM to Dynamics 365 using managed identities and creating your first API endpoint.]]></summary></entry></feed>
+<p>Assuming everything went according to the plan, you should receive a 200 OK response, and be ready to crank out your own API! 🥳</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="APIM" /><category term="Dynamics 365" /><category term="Power Platform" /><category term="Managed Identity" /><summary type="html"><![CDATA[Short and simple guide on how to connect APIM to Dynamics 365, using managed identities, and creating your first API endpoint.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="/add-operation.png" /><media:content medium="image" url="/add-operation.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

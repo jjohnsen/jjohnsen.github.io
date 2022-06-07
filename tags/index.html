@@ -118,6 +118,11 @@
         </a>
         <ul class="visible-links"></ul>
         
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">Toggle menu</span>
           <div class="navicon"></div>
@@ -235,8 +240,8 @@
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Dynamics 365 comes with a robust and powerful REST API out of the box.
-However, when integrating with other parties, I prefer to use Azure API Management (AP...</p>
+    <p class="archive__item-excerpt" itemprop="description">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
+</p>
   </article>
 </div>
 
@@ -292,8 +297,8 @@ However, when integrating with other parties, I prefer to use Azure API Manageme
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Dynamics 365 comes with a robust and powerful REST API out of the box.
-However, when integrating with other parties, I prefer to use Azure API Management (AP...</p>
+    <p class="archive__item-excerpt" itemprop="description">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
+</p>
   </article>
 </div>
 
@@ -349,8 +354,8 @@ However, when integrating with other parties, I prefer to use Azure API Manageme
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Dynamics 365 comes with a robust and powerful REST API out of the box.
-However, when integrating with other parties, I prefer to use Azure API Management (AP...</p>
+    <p class="archive__item-excerpt" itemprop="description">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
+</p>
   </article>
 </div>
 
@@ -406,8 +411,8 @@ However, when integrating with other parties, I prefer to use Azure API Manageme
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Dynamics 365 comes with a robust and powerful REST API out of the box.
-However, when integrating with other parties, I prefer to use Azure API Management (AP...</p>
+    <p class="archive__item-excerpt" itemprop="description">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
+</p>
   </article>
 </div>
 
@@ -423,6 +428,17 @@ However, when integrating with other parties, I prefer to use Azure API Manageme
 </div>
     </div>
 
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
     
 
     <div id="footer" class="page__footer">
@@ -466,6 +482,10 @@ However, when integrating with other parties, I prefer to use Azure API Manageme
 
 
 
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
 
 
 
