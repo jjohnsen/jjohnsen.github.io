@@ -23,6 +23,12 @@ var store = [{
         "url": "/2022/apim-and-crm-in-30-minutes/",
         "teaser": null
       },{
+        "title": "Getting started with Power Pages + Vue.js",
+        "excerpt":"Step 1: Creating the Vue.js project Scaffolding the Vue.js project To quickly setup a project we use the create-vue tool. Drop down to your favorite shell and run: npm create vue@latest. Please note that I’ve added Pinia for future state management. &gt; npm create vue@latest Need to install the following...","categories": [],
+        "tags": ["Power Pages","Vue.js","JavaScript","Vite"],
+        "url": "/2023/getting-started-with-power-pages-vuejs/",
+        "teaser": null
+      },{
         "title": "Migrating Azure DevOps Projects - Part 1: Repos and Wikis",
         "excerpt":"Migrating Azure DevOps projects between organizations (hopefully) isn’t something you do every day, but when the need arises—whether due to a merger, reorganization, or other reasons—it can be a challenging process. Breaking the work down, you’re mostly dealing with Boards/Work Items, Repos, Wikis, Pipelines, Test Plans, and Artifacts. You’d expect...","categories": [],
         "tags": ["Azure DevOps","Git","Migration","Wikis"],
@@ -33,5 +39,11 @@ var store = [{
         "excerpt":"In Part 1, we covered how to migrate Repos and Wikis. Now we’ll look into the more complex challenge of migrating Boards and Work Items. This process is more demanding and requires additional tooling. Fortunately, azure-devops-migration-tools, created by Martin Hinshelwood, provides a way to move Work Items, Test Plans &amp;...","categories": [],
         "tags": ["Azure DevOps","Migration","Boards","Work Items"],
         "url": "/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/",
+        "teaser": null
+      },{
+        "title": "ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A",
+        "excerpt":"I’ve been running a custom ESPHome implementation for my Daikin Altherma heat pump since 2022, and I finally got around to doing a proper rewrite. The result is ESPHome Altherma - a native ESPHome custom component that monitors your Daikin Altherma 3 heat pump via the X10A connector and integrates...","categories": [],
+        "tags": ["ESPHome","Home Assistant","Daikin","Heat Pump","ESP32","IoT"],
+        "url": "/2026/esphome-altherma-monitor-daikin-heat-pump/",
         "teaser": null
       }]

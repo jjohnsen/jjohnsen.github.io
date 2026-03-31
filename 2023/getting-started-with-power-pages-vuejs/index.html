@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>A structured approach to testing JavaScript for the Unified Interface transition - jjohnsen.github.io</title>
-<meta name="description" content="A structured approach to testing and preparing your JavaScript customizations for the Microsoft Dynamics 365 Unified Interface transition.">
+<!-- begin _includes/seo.html --><title>Getting started with Power Pages + Vue.js - jjohnsen.github.io</title>
+<meta name="description" content="A step-by-step guide to setting up a Vue.js app and integrating it with Microsoft Power Pages using Vite’s dev server and HTTPS.">
 
 
   <meta name="author" content="Jan-Åge Johnsen">
@@ -22,30 +22,30 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="nb_NO">
 <meta property="og:site_name" content="jjohnsen.github.io">
-<meta property="og:title" content="A structured approach to testing JavaScript for the Unified Interface transition">
-<meta property="og:url" content="/2020/structured-approach-testing-javascript-unified-interface/">
+<meta property="og:title" content="Getting started with Power Pages + Vue.js">
+<meta property="og:url" content="/2023/getting-started-with-power-pages-vuejs/">
 
 
-  <meta property="og:description" content="A structured approach to testing and preparing your JavaScript customizations for the Microsoft Dynamics 365 Unified Interface transition.">
-
-
-
-
-
-
-
-  <meta property="article:published_time" content="2020-03-02T00:00:00+01:00">
+  <meta property="og:description" content="A step-by-step guide to setting up a Vue.js app and integrating it with Microsoft Power Pages using Vite’s dev server and HTTPS.">
 
 
 
 
 
-  
+
+
+  <meta property="article:published_time" content="2023-11-15T00:00:00+01:00">
+
+
+
+
 
   
 
+  
 
-<link rel="canonical" href="/2020/structured-approach-testing-javascript-unified-interface/">
+
+<link rel="canonical" href="/2023/getting-started-with-power-pages-vuejs/">
 
 
 
@@ -266,15 +266,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="A structured approach to testing JavaScript for the Unified Interface transition">
-    <meta itemprop="description" content="With the Dynamics 365 final transition date to Unified Interface closing in, a structured approach to testing your JavaScripts is needed.">
-    <meta itemprop="datePublished" content="2020-03-02T00:00:00+01:00">
+    <meta itemprop="headline" content="Getting started with Power Pages + Vue.js">
+    <meta itemprop="description" content="A step-by-step guide to setting up a Vue.js app and integrating it with Microsoft Power Pages using Vite’s dev server and HTTPS.">
+    <meta itemprop="datePublished" content="2023-11-15T00:00:00+01:00">
     
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">A structured approach to testing JavaScript for the Unified Interface transition
+          <h1 id="page-title" class="page__title" itemprop="headline">Getting started with Power Pages + Vue.js
 </h1>
           
 
@@ -284,7 +284,7 @@
       <span class="page__meta-date">
         <i class="far fa-calendar-alt" aria-hidden="true"></i>
         
-        <time datetime="2020-03-02T00:00:00+01:00">March 2, 2020</time>
+        <time datetime="2023-11-15T00:00:00+01:00">November 15, 2023</time>
       </span>
     
 
@@ -297,7 +297,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          3 minute read
+          2 minute read
         
       </span>
     
@@ -312,126 +312,158 @@
           <aside class="sidebar__right sticky">
             <nav class="toc">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#power-apps-solution-checker-doesnt-cut-it">Power Apps Solution Checker doesn’t cut it</a></li><li><a href="#create-an-inventory-of-javascripts-and-functions">Create an inventory of JavaScripts and functions</a><ul><li><a href="#doing-some-filtering">Doing some filtering…</a></li></ul></li><li><a href="#testing">Testing</a><ul><li><a href="#example-testing-session-for-account">Example testing session for account</a></li></ul></li><li><a href="#bonus-tip-1--look-out-for-event-handlers-added-through-code">Bonus tip #1 – Look out for event handlers added through code</a></li><li><a href="#bonus-tip-2--web-resources">Bonus tip #2 – Web resources</a></li><li><a href="#bonus-tip-3--dealing-with-badly-formatted--minimized-scripts">Bonus tip #3 – Dealing with badly formatted / “minimized” scripts</a></li></ul>
+              <ul class="toc__menu"><li><a href="#step-1-creating-the-vuejs-project">Step 1: Creating the Vue.js project</a><ul><li><a href="#scaffolding-the-vuejs-project">Scaffolding the Vue.js project</a></li><li><a href="#starting-the-developer-server">Starting the developer server</a></li></ul></li><li><a href="#step-2-adding-the-app-to-power-pages">Step 2: Adding the app to Power Pages</a><ul><li><a href="#power-pages">Power Pages</a><ul><li><a href="#add-a-page">Add a page</a></li></ul></li><li><a href="#adapting-the-vue-app-for-power-pages">Adapting the Vue app for Power Pages</a><ul><li><a href="#turn-on-https">Turn on HTTPS</a></li></ul></li><li><a href="#opening-the-vue-app-in-power-pages">Opening the Vue app in Power Pages</a></li></ul></li></ul>
 
             </nav>
           </aside>
         
-        <p><img src="dynamics-365-header.jpg" alt="Microsoft Dynamics 365 header" /></p>
+        <h2 id="step-1-creating-the-vuejs-project">Step 1: Creating the Vue.js project</h2>
 
-<p>With Microsoft Dynamics 365 final transition date, October 2020, to Unified Interface closing in, it is high time getting your JavaScripts ready for the switch.</p>
+<h3 id="scaffolding-the-vuejs-project">Scaffolding the Vue.js project</h3>
 
-<p>If you have large solution, and especially if it’s been developed over several version of Dynamics, the task can be substantial, and a structured approach is indeed needed.</p>
+<p>To quickly setup a project we use the create-vue tool.</p>
 
-<h2 id="power-apps-solution-checker-doesnt-cut-it">Power Apps Solution Checker doesn’t cut it</h2>
+<p>Drop down to your favorite shell and run: <code class="language-plaintext highlighter-rouge">npm create vue@latest</code>.</p>
 
-<p>While the Solution Checker can provide helpful tips about best practices and future deprecations, our experience so far, has been that it generates a lot of noise, but doesn’t actually catch (subtle) changes that breaks scripts.</p>
+<p>Please note that I’ve added Pinia for future state management.</p>
 
-<p>On example of this is the setValue function. The old legacy web client is quite forgiving and accepts both string and numbers as inputs for a Two Options field. The new UI, however throws an error if you try using anything but a Boolean.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; npm create vue@latest
 
-<p>Setting a two options field with a string in the (now) old legacy client works without problems.</p>
+Need to install the following packages:
+  create-vue@3.8.0
+Ok to proceed? (y)
 
-<p><img src="setvalue-legacy-client.png" alt="Setting a two options field with a string in the legacy web client" /></p>
+Vue.js - The Progressive JavaScript Framework
 
-<p>Doing the same in Unified Interface throws an error!</p>
+√ Project name: ... vue-in-powerpages
+√ Add TypeScript? ... No
+√ Add JSX Support? ... No
+√ Add Vue Router for Single Page Application development? ... No
+√ Add Pinia for state management? ... Yes
+√ Add Vitest for Unit Testing? ... No
+√ Add an End-to-End Testing Solution? » No
+√ Add ESLint for code quality? ... No
 
-<p><img src="setvalue-unified-interface-error.png" alt="Setting a two options field in Unified Interface throws an error" /></p>
+Scaffolding project in C:\repos\Vuejs-in-PowerPages\vue-in-powerpages...
 
-<p>Another example is the Xrm.WebApi.retrieveRecord (and related) functions. The entity logical name is accepted in both singular and plural form in the legacy client. In the new Unified Interface only the singular form is recognized:</p>
+Done. Now run:
 
-<p><img src="retrieverecord-entity-name.png" alt="Xrm.WebApi.retrieveRecord entity logical name differences between legacy and Unified Interface" /></p>
+  cd vue-in-powerpages
+  npm install
+  npm run dev
+</code></pre></div></div>
 
-<p>The solution checker won’t warn about any of these, or other, problems. So, if you want to make sure that your solution continues to work in Unified Interface, you need to do a proper GAP analyses and really test that your scripts continue to work properly.</p>
+<h3 id="starting-the-developer-server">Starting the developer server</h3>
 
-<h2 id="create-an-inventory-of-javascripts-and-functions">Create an inventory of JavaScripts and functions</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd vue-in-powerpages
+npm install
+npm run dev
+</code></pre></div></div>
 
-<p>Before you can start testing, you need to know what lives inside your solution; scripts, functions and the events triggering the functions. The best tool we’ve found for the job is Scripts Finder in XrmToolBox.</p>
+<p>The server should now start, and you can open your browser at <a href="http://localhost:5173/">http://localhost:5173/</a></p>
 
-<p><img src="scripts-finder-xrmtoolbox.png" alt="Scripts Finder in XrmToolBox" /></p>
+<p><img src="vue-dev-server.png" alt="Vue.js dev server running in the browser on localhost:5173" /></p>
 
-<p>Using the tool is quite easy:</p>
+<p>Pat yourself on the back! You did it! Your first app is up and running!</p>
 
-<ol>
-  <li>Connect to your organization</li>
-  <li>Start Scripts Finder</li>
-  <li>Click Find Scripts usage and select For all entities</li>
-  <li>Watch the spinner for some time…</li>
-  <li>Click Export to csv</li>
-  <li>Open the file in Excel</li>
-  <li>Use the Data → Text to Columns function if the file content isn’t automatically recognized</li>
-  <li>Use the Home → Sort &amp; Filter → Filter command to enable sorting and filtering in the first row</li>
-</ol>
+<h2 id="step-2-adding-the-app-to-power-pages">Step 2: Adding the app to Power Pages</h2>
 
-<p>You should now have an almost (more on that later…) complete list of JavaScript usage in your Solution:</p>
+<p>The next steps requires some more work, both in Power Pages and in the Vue.js app.</p>
 
-<p><img src="scripts-finder-results.png" alt="Scripts Finder results exported to Excel showing JavaScript inventory" /></p>
+<h3 id="power-pages">Power Pages</h3>
 
-<h3 id="doing-some-filtering">Doing some filtering…</h3>
+<h4 id="add-a-page">Add a page</h4>
 
-<p>As the list contains (almost) all the scripts in the solution you should filter out those which aren’t relevant for your testing.</p>
+<p>We’ll start in Power Pages by creating a new page for the component to live on:</p>
 
-<p><img src="scripts-finder-filtering.png" alt="Filtering the Scripts Finder results in Excel" /></p>
+<p><img src="power-pages-new-page.png" alt="Creating a new page in Power Pages" /></p>
 
-<ul>
-  <li>Filter out built-in and third-party scripts by opening the filtering drop-down on the Script Location Column and deselect unwanted scripts.</li>
-  <li>Filter out scripts on inactive forms in the Form State column.</li>
-  <li>Filter out disabled script functions in the Enabled column.</li>
-</ul>
+<p>Once the page is created we’ll open it in Visual Studio to add some customizations:</p>
 
-<h2 id="testing">Testing</h2>
+<p><img src="power-pages-open-vscode.png" alt="Opening the page in Visual Studio Code" /></p>
 
-<p>You are now ready to start testing, which means starting on the top of the list and test each function in Unified Interface.</p>
+<p>Here we’ll add a div for the app and load the script from localhost:</p>
 
-<p>Going down the list you should make a note of the following columns:</p>
+<p><img src="power-pages-add-div.png" alt="Adding the div and script tag for the Vue app" /></p>
 
-<ul>
-  <li><strong>Entity Logical Name</strong> – tells you which entity to test</li>
-  <li><strong>Form Name</strong> – tells you which form to test</li>
-  <li><strong>Event</strong> – tells you which event that will triggers the function</li>
-  <li><strong>Control</strong> – tells you which control (if any) triggers the function</li>
-  <li><strong>Script Location</strong> – tells you which script to look for</li>
-  <li><strong>Method Called</strong> – tells you the method you should test</li>
-</ul>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span class="nt">&gt;</span>The Vue app will live here!<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span> <span class="na">src=</span><span class="s">"https://localhost:5173/src/main.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
 
-<h3 id="example-testing-session-for-account">Example testing session for account</h3>
+<p>Save the file, head back to Portals Studio and remember to Sync before previewing the page.</p>
 
-<p><img src="testing-session-account.png" alt="Example testing session showing script functions for the account entity" /></p>
+<p><img src="power-pages-sync.png" alt="Sync button in Power Pages" /></p>
 
-<p>Looking at the above image: for the Sales Insights form on the account entity we should test the setCreditonhold function and loadAnotherAccount function in the lv_unified_breakage.js file. (The last line just tells us that lv_unified_breakage.js is added to the form).</p>
+<p>You should now see the placeholder div on the page, but unfortunately it wont load before we make some changes to the Vue app.</p>
 
-<p>Fire up Chrome (or a similar chromium browser) and open the Sales Insights form on the account entity.</p>
+<p><img src="power-pages-placeholder-div.png" alt="Placeholder div visible on the Power Pages page" /></p>
 
-<p>Open developer tools and press CTRL-P and search for the script file and select it:</p>
+<p><img src="power-pages-console-errors.png" alt="Browser console showing errors loading the Vue app" /></p>
 
-<p><img src="devtools-search-script.png" alt="Chrome DevTools - searching for a script file with CTRL-P" /></p>
+<h3 id="adapting-the-vue-app-for-power-pages">Adapting the Vue app for Power Pages</h3>
 
-<p>The script file will open breakpoints can be added to the setCreditonhold function and loadAnotherAccount function:</p>
+<p>As stated above we need to make some adjustment before the app can be loaded in Power Pages.</p>
 
-<p><img src="devtools-breakpoints.png" alt="Chrome DevTools - adding breakpoints to JavaScript functions" /></p>
+<h4 id="turn-on-https">Turn on HTTPS</h4>
 
-<p>Setting breakpoints will allow stepping though the functions when they are triggered and verify that they work as intended. For functions with branching logic you would typically add breakpoints to each branch and test them individually.</p>
+<p>Power Pages runs on HTTPS, while the local development server now uses HTTP. To prevent your browser from blocking the app, it’s necessary to enable HTTPS on the local server.</p>
 
-<p>All that is left is to trigger the setCreditonhold function by loading the form and the loadAnotherAccount function by changing the product and wish you:</p>
+<p>To enable https we first need to install the <a href="https://github.com/vitejs/vite-plugin-basic-ssl">vite plugin basic ssl</a>:</p>
 
-<p>Happy testing 😊</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; cd vue-in-powerpages
+&gt; npm install --save-dev @vitejs/plugin-basic-ssl
+</code></pre></div></div>
 
-<h2 id="bonus-tip-1--look-out-for-event-handlers-added-through-code">Bonus tip #1 – Look out for event handlers added through code</h2>
+<p>We then need to add it to the vite.config.js:</p>
 
-<p>The report from Scripts Finder does not include event handlers added through code with addOnChange, addOnLoad, etc. so remember to look for them when going through script files.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">fileURLToPath</span><span class="p">,</span> <span class="nx">URL</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">node:url</span><span class="dl">'</span>
+<span class="k">import</span> <span class="nx">basicSsl</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@vitejs/plugin-basic-ssl</span><span class="dl">'</span> <span class="c1">// Load basic SSL plugin</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">defineConfig</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">vite</span><span class="dl">'</span>
+<span class="k">import</span> <span class="nx">vue</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@vitejs/plugin-vue</span><span class="dl">'</span>
 
-<h2 id="bonus-tip-2--web-resources">Bonus tip #2 – Web resources</h2>
+<span class="k">export</span> <span class="k">default</span> <span class="nx">defineConfig</span><span class="p">({</span>
+  <span class="na">server</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">https</span><span class="p">:</span> <span class="kc">true</span> <span class="c1">// Enable HTTPS for the server</span>
+  <span class="p">},</span>
+  <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+    <span class="nx">vue</span><span class="p">(),</span>
+    <span class="nx">basicSsl</span><span class="p">()</span> <span class="c1">// Use basic SSL plugin for HTTPS</span>
+  <span class="p">],</span>
+  <span class="na">resolve</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alias</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">'</span><span class="s1">@</span><span class="dl">'</span><span class="p">:</span> <span class="nx">fileURLToPath</span><span class="p">(</span><span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="dl">'</span><span class="s1">./src</span><span class="dl">'</span><span class="p">,</span> <span class="k">import</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">url</span><span class="p">))</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div></div>
 
-<p>JavaScript added to web resources (as files or inline) are not included in the report from Scripts Finder so remember to test them as well.</p>
+<h3 id="opening-the-vue-app-in-power-pages">Opening the Vue app in Power Pages</h3>
 
-<h2 id="bonus-tip-3--dealing-with-badly-formatted--minimized-scripts">Bonus tip #3 – Dealing with badly formatted / “minimized” scripts</h2>
+<p>Starting the dev server - it should now be listening on HTTPS:</p>
 
-<p>Chrome pretty print function can help you deal with this:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; npm run dev
+VITE v4.5.0  ready in 701 ms
 
-<p><img src="devtools-pretty-print.png" alt="Chrome DevTools pretty print function for formatting minimized scripts" /></p>
+  ➜  Local:   https://localhost:5173/
+</code></pre></div></div>
+
+<p>Opening <a href="https://localhost:5173/">https://localhost:5173/</a> will now yield a warning that you need to accept:</p>
+
+<p><img src="https-cert-warning.png" alt="Browser HTTPS certificate warning" /></p>
+
+<p><img src="https-cert-accept.png" alt="Accepting the self-signed certificate" /></p>
+
+<p>You should now be able reload the page we created in Power Pages and load the app.</p>
+
+<p>And as if that wasn’t enough you should now be able to do live editing of the Vue app and instantly see the changes on save!</p>
+
+<p><img src="vue-and-powerpages.gif" alt="Vue.js app running inside Power Pages with live reload" /></p>
+
+<p>Once again, pat your self on the back! Well done!</p>
 
 <hr />
 
-<p><em>Originally published on <a href="https://www.linkedin.com/pulse/structured-approach-testing-javascript-unified-jan-%C3%A5ge-johnsen/">LinkedIn</a>.</em></p>
+<p><em>Source: <a href="https://github.com/jjohnsen/vue-in-powerpages">GitHub - jjohnsen/vue-in-powerpages</a></em></p>
 
         
       </section>
@@ -448,38 +480,23 @@
     <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
     <span itemprop="keywords">
     
-      <a href="/tags/#dynamics-365" class="page__taxonomy-item" rel="tag">Dynamics 365</a><span class="sep">, </span>
-    
       <a href="/tags/#javascript" class="page__taxonomy-item" rel="tag">JavaScript</a><span class="sep">, </span>
     
-      <a href="/tags/#testing" class="page__taxonomy-item" rel="tag">Testing</a><span class="sep">, </span>
+      <a href="/tags/#power-pages" class="page__taxonomy-item" rel="tag">Power Pages</a><span class="sep">, </span>
     
-      <a href="/tags/#unified-interface" class="page__taxonomy-item" rel="tag">Unified Interface</a>
+      <a href="/tags/#vite" class="page__taxonomy-item" rel="tag">Vite</a><span class="sep">, </span>
     
-    </span>
-  </p>
-
-
-
-
-  
-
-
-  
-
-  <p class="page__taxonomy">
-    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
-    <span itemprop="keywords">
-    
-      <a href="/categories/#dynamics-365" class="page__taxonomy-item" rel="tag">Dynamics 365</a>
+      <a href="/tags/#vue-js" class="page__taxonomy-item" rel="tag">Vue.js</a>
     
     </span>
   </p>
+
+
 
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-03-02T00:00:00+01:00">March 2, 2020</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2023-11-15T00:00:00+01:00">November 15, 2023</time></p>
 
 
       </footer>
@@ -489,10 +506,11 @@
       
   <nav class="pagination">
     
-      <a href="#" class="pagination--pager disabled">Previous</a>
+      <a href="/2022/apim-and-crm-in-30-minutes/" class="pagination--pager" title="Get started with Azure API Management and Dynamics 365 in 30 minutes
+">Previous</a>
     
     
-      <a href="/2020/hacking-dyn365-scripts-like-a-boss/" class="pagination--pager" title="Hacking #dyn365 scripts like a boss😎
+      <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" class="pagination--pager" title="Migrating Azure DevOps Projects - Part 1: Repos and Wikis
 ">Next</a>
     
   </nav>
@@ -657,7 +675,7 @@
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/2023/getting-started-with-power-pages-vuejs/" rel="permalink">Getting started with Power Pages + Vue.js
+        <a href="/2022/apim-and-crm-in-30-minutes/" rel="permalink">Get started with Azure API Management and Dynamics 365 in 30 minutes
 </a>
       
     </h2>
@@ -669,7 +687,7 @@
       <span class="page__meta-date">
         <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
         
-        <time datetime="2023-11-15T00:00:00+01:00">November 15, 2023</time>
+        <time datetime="2022-06-02T00:00:00+02:00">June 2, 2022</time>
       </span>
     
 
@@ -682,14 +700,14 @@
       <span class="page__meta-readtime">
         <i class="far fa-fw fa-clock" aria-hidden="true"></i>
         
-          3 minute read
+          2 minute read
         
       </span>
     
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">A step-by-step guide to setting up a Vue.js app and integrating it with Microsoft Power Pages using Vite’s dev server and HTTPS.
+    <p class="archive__item-excerpt" itemprop="description">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
 </p>
   </article>
 </div>

@@ -1,4 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-03-31T20:39:49+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items</title><link href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="alternate" type="text/html" title="Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items" /><published>2025-02-10T00:00:00+01:00</published><updated>2025-02-10T00:00:00+01:00</updated><id>/2025/migrating-azure-devops-projects-part-2-boards-and-work-items</id><content type="html" xml:base="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/"><![CDATA[<p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps Part 2 - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts with Azure Boards highlighted" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-03-31T20:53:55+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A</title><link href="/2026/esphome-altherma-monitor-daikin-heat-pump/" rel="alternate" type="text/html" title="ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A" /><published>2026-01-05T00:00:00+01:00</published><updated>2026-01-05T00:00:00+01:00</updated><id>/2026/esphome-altherma-monitor-daikin-heat-pump</id><content type="html" xml:base="/2026/esphome-altherma-monitor-daikin-heat-pump/"><![CDATA[<p>I’ve been running a custom ESPHome implementation for my Daikin Altherma heat pump since 2022, and I finally got around to doing a proper rewrite. The result is <a href="https://github.com/jjohnsen/esphome-altherma">ESPHome Altherma</a> - a native ESPHome custom component that monitors your Daikin Altherma 3 heat pump via the X10A connector and integrates directly with Home Assistant.</p>
+
+<p>Inspired by <a href="https://github.com/raomin/ESPAltherma">ESPAltherma</a>, but built as a proper ESPHome component - so you get OTA updates, auto-discovery, and all the other ESPHome goodness out of the box.</p>
+
+<p><img src="esphome-dashboard.png" alt="Home Assistant dashboard showing Altherma sensor data" /></p>
+
+<p><img src="esphome-device-entities.png" alt="ESPHome device page with Altherma entities" /></p>
+
+<h2 id="features">Features</h2>
+
+<ul>
+  <li><strong>Browser-based installation</strong> - flash directly from your browser via <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>, no coding required</li>
+  <li><strong>Temperature monitoring</strong> - outdoor air, discharge pipe, heat exchanger, leaving water, inlet water, DHW tank, etc.</li>
+  <li><strong>Electrical sensors</strong> - inverter current, voltage</li>
+  <li><strong>Operational data</strong> - compressor frequency, fan speeds, flow rate, water pressure, pump signal</li>
+  <li><strong>Binary sensors</strong> - defrost status, thermostat ON/OFF, silent mode, freeze protection, 3-way valve, BUH steps</li>
+  <li><strong>Diagnostics</strong> - operation mode, error codes and sub-codes</li>
+  <li><strong>Multiple board support</strong> - ESP32, ESP32-S3, M5Stack AtomS3 Lite</li>
+  <li><strong>Model-specific configs</strong> - modular YAML files per heat pump model</li>
+  <li><strong>Mock UART mode</strong> - for development/testing without hardware</li>
+  <li><strong>OTA updates</strong> - with automatic update checking via GitHub releases</li>
+</ul>
+
+<h2 id="hardware">Hardware</h2>
+
+<p>Any ESP32 board with a UART will work. I’ve tested with:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Board</th>
+      <th>YAML Config</th>
+      <th>UART RX Pin</th>
+      <th>UART TX Pin</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.espboards.dev/esp32/esp32doit-devkit-v1/">ESP32 DevKit</a></td>
+      <td><code class="language-plaintext highlighter-rouge">esphome-altherma-esp32.yaml</code></td>
+      <td>GPIO 16</td>
+      <td>GPIO 17</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp32-s3-devkitc-1/">ESP32-S3 DevKit</a></td>
+      <td><code class="language-plaintext highlighter-rouge">esphome-altherma-esp32-s3.yaml</code></td>
+      <td>GPIO 2</td>
+      <td>GPIO 1</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.m5stack.com/en/core/AtomS3%20Lite">M5Stack AtomS3 Lite</a></td>
+      <td><code class="language-plaintext highlighter-rouge">esphome-altherma-atoms3.yaml</code></td>
+      <td>GPIO 2 (G1)</td>
+      <td>GPIO 1 (G2)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="further-reading">Further Reading</h2>
+
+<ul>
+  <li><strong>GitHub:</strong> <a href="https://github.com/jjohnsen/esphome-altherma">github.com/jjohnsen/esphome-altherma</a></li>
+  <li><strong>Web installer:</strong> <a href="https://jjohnsen.github.io/esphome-altherma/">jjohnsen.github.io/esphome-altherma</a></li>
+</ul>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="ESPHome" /><category term="Home Assistant" /><category term="Daikin" /><category term="Heat Pump" /><category term="ESP32" /><category term="IoT" /><summary type="html"><![CDATA[A native ESPHome custom component for monitoring Daikin Altherma 3 heat pumps via the X10A connector - with browser-based installation and Home Assistant auto-discovery.]]></summary></entry><entry><title type="html">Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items</title><link href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="alternate" type="text/html" title="Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items" /><published>2025-02-10T00:00:00+01:00</published><updated>2025-02-10T00:00:00+01:00</updated><id>/2025/migrating-azure-devops-projects-part-2-boards-and-work-items</id><content type="html" xml:base="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/"><![CDATA[<p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps Part 2 - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts with Azure Boards highlighted" /></p>
 
 <p>In <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">Part 1</a>, we covered how to migrate Repos and Wikis. Now we’ll look into the more complex challenge of migrating Boards and Work Items.</p>
 
@@ -208,7 +271,153 @@ git push <span class="nt">--mirror</span> https://[username]:[password]@dev.azur
 
 <p><a href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/">📊 Part 2: Migrating Boards &amp; Work Items</a> | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-2-boards-work-items-johnsen-igzvf/">🔗LinkedIn</a></p>
 
-<p>🧪 Part 3: (Coming soon!)</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Azure DevOps" /><category term="Git" /><category term="Migration" /><category term="Wikis" /><summary type="html"><![CDATA[Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.]]></summary></entry><entry><title type="html">Get started with Azure API Management and Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Get started with Azure API Management and Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-07T00:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
+<p>🧪 Part 3: (Coming soon!)</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Azure DevOps" /><category term="Git" /><category term="Migration" /><category term="Wikis" /><summary type="html"><![CDATA[Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.]]></summary></entry><entry><title type="html">Getting started with Power Pages + Vue.js</title><link href="/2023/getting-started-with-power-pages-vuejs/" rel="alternate" type="text/html" title="Getting started with Power Pages + Vue.js" /><published>2023-11-15T00:00:00+01:00</published><updated>2023-11-15T00:00:00+01:00</updated><id>/2023/getting-started-with-power-pages-vuejs</id><content type="html" xml:base="/2023/getting-started-with-power-pages-vuejs/"><![CDATA[<h2 id="step-1-creating-the-vuejs-project">Step 1: Creating the Vue.js project</h2>
+
+<h3 id="scaffolding-the-vuejs-project">Scaffolding the Vue.js project</h3>
+
+<p>To quickly setup a project we use the create-vue tool.</p>
+
+<p>Drop down to your favorite shell and run: <code class="language-plaintext highlighter-rouge">npm create vue@latest</code>.</p>
+
+<p>Please note that I’ve added Pinia for future state management.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; npm create vue@latest
+
+Need to install the following packages:
+  create-vue@3.8.0
+Ok to proceed? (y)
+
+Vue.js - The Progressive JavaScript Framework
+
+√ Project name: ... vue-in-powerpages
+√ Add TypeScript? ... No
+√ Add JSX Support? ... No
+√ Add Vue Router for Single Page Application development? ... No
+√ Add Pinia for state management? ... Yes
+√ Add Vitest for Unit Testing? ... No
+√ Add an End-to-End Testing Solution? » No
+√ Add ESLint for code quality? ... No
+
+Scaffolding project in C:\repos\Vuejs-in-PowerPages\vue-in-powerpages...
+
+Done. Now run:
+
+  cd vue-in-powerpages
+  npm install
+  npm run dev
+</code></pre></div></div>
+
+<h3 id="starting-the-developer-server">Starting the developer server</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd vue-in-powerpages
+npm install
+npm run dev
+</code></pre></div></div>
+
+<p>The server should now start, and you can open your browser at <a href="http://localhost:5173/">http://localhost:5173/</a></p>
+
+<p><img src="vue-dev-server.png" alt="Vue.js dev server running in the browser on localhost:5173" /></p>
+
+<p>Pat yourself on the back! You did it! Your first app is up and running!</p>
+
+<h2 id="step-2-adding-the-app-to-power-pages">Step 2: Adding the app to Power Pages</h2>
+
+<p>The next steps requires some more work, both in Power Pages and in the Vue.js app.</p>
+
+<h3 id="power-pages">Power Pages</h3>
+
+<h4 id="add-a-page">Add a page</h4>
+
+<p>We’ll start in Power Pages by creating a new page for the component to live on:</p>
+
+<p><img src="power-pages-new-page.png" alt="Creating a new page in Power Pages" /></p>
+
+<p>Once the page is created we’ll open it in Visual Studio to add some customizations:</p>
+
+<p><img src="power-pages-open-vscode.png" alt="Opening the page in Visual Studio Code" /></p>
+
+<p>Here we’ll add a div for the app and load the script from localhost:</p>
+
+<p><img src="power-pages-add-div.png" alt="Adding the div and script tag for the Vue app" /></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span class="nt">&gt;</span>The Vue app will live here!<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"module"</span> <span class="na">src=</span><span class="s">"https://localhost:5173/src/main.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>Save the file, head back to Portals Studio and remember to Sync before previewing the page.</p>
+
+<p><img src="power-pages-sync.png" alt="Sync button in Power Pages" /></p>
+
+<p>You should now see the placeholder div on the page, but unfortunately it wont load before we make some changes to the Vue app.</p>
+
+<p><img src="power-pages-placeholder-div.png" alt="Placeholder div visible on the Power Pages page" /></p>
+
+<p><img src="power-pages-console-errors.png" alt="Browser console showing errors loading the Vue app" /></p>
+
+<h3 id="adapting-the-vue-app-for-power-pages">Adapting the Vue app for Power Pages</h3>
+
+<p>As stated above we need to make some adjustment before the app can be loaded in Power Pages.</p>
+
+<h4 id="turn-on-https">Turn on HTTPS</h4>
+
+<p>Power Pages runs on HTTPS, while the local development server now uses HTTP. To prevent your browser from blocking the app, it’s necessary to enable HTTPS on the local server.</p>
+
+<p>To enable https we first need to install the <a href="https://github.com/vitejs/vite-plugin-basic-ssl">vite plugin basic ssl</a>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; cd vue-in-powerpages
+&gt; npm install --save-dev @vitejs/plugin-basic-ssl
+</code></pre></div></div>
+
+<p>We then need to add it to the vite.config.js:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">fileURLToPath</span><span class="p">,</span> <span class="nx">URL</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">node:url</span><span class="dl">'</span>
+<span class="k">import</span> <span class="nx">basicSsl</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@vitejs/plugin-basic-ssl</span><span class="dl">'</span> <span class="c1">// Load basic SSL plugin</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">defineConfig</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">vite</span><span class="dl">'</span>
+<span class="k">import</span> <span class="nx">vue</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@vitejs/plugin-vue</span><span class="dl">'</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">defineConfig</span><span class="p">({</span>
+  <span class="na">server</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">https</span><span class="p">:</span> <span class="kc">true</span> <span class="c1">// Enable HTTPS for the server</span>
+  <span class="p">},</span>
+  <span class="na">plugins</span><span class="p">:</span> <span class="p">[</span>
+    <span class="nx">vue</span><span class="p">(),</span>
+    <span class="nx">basicSsl</span><span class="p">()</span> <span class="c1">// Use basic SSL plugin for HTTPS</span>
+  <span class="p">],</span>
+  <span class="na">resolve</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">alias</span><span class="p">:</span> <span class="p">{</span>
+      <span class="dl">'</span><span class="s1">@</span><span class="dl">'</span><span class="p">:</span> <span class="nx">fileURLToPath</span><span class="p">(</span><span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="dl">'</span><span class="s1">./src</span><span class="dl">'</span><span class="p">,</span> <span class="k">import</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">url</span><span class="p">))</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h3 id="opening-the-vue-app-in-power-pages">Opening the Vue app in Power Pages</h3>
+
+<p>Starting the dev server - it should now be listening on HTTPS:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; npm run dev
+VITE v4.5.0  ready in 701 ms
+
+  ➜  Local:   https://localhost:5173/
+</code></pre></div></div>
+
+<p>Opening <a href="https://localhost:5173/">https://localhost:5173/</a> will now yield a warning that you need to accept:</p>
+
+<p><img src="https-cert-warning.png" alt="Browser HTTPS certificate warning" /></p>
+
+<p><img src="https-cert-accept.png" alt="Accepting the self-signed certificate" /></p>
+
+<p>You should now be able reload the page we created in Power Pages and load the app.</p>
+
+<p>And as if that wasn’t enough you should now be able to do live editing of the Vue app and instantly see the changes on save!</p>
+
+<p><img src="vue-and-powerpages.gif" alt="Vue.js app running inside Power Pages with live reload" /></p>
+
+<p>Once again, pat your self on the back! Well done!</p>
+
+<hr />
+
+<p><em>Source: <a href="https://github.com/jjohnsen/vue-in-powerpages">GitHub - jjohnsen/vue-in-powerpages</a></em></p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Power Pages" /><category term="Vue.js" /><category term="JavaScript" /><category term="Vite" /><summary type="html"><![CDATA[A step-by-step guide to setting up a Vue.js app and integrating it with Microsoft Power Pages using Vite's dev server and HTTPS.]]></summary></entry><entry><title type="html">Get started with Azure API Management and Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Get started with Azure API Management and Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-07T00:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
 However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons.</p>
 
 <p>The setup used to be somewhat convoluted, but is now  much simpler.
