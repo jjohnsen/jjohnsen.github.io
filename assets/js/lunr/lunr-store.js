@@ -1,4 +1,10 @@
 var store = [{
+        "title": "Associate and disassociate entities using the Xrm.WebApi Client API",
+        "excerpt":"With Dynamics 365: 2020 release wave 1 it now looks like it’s possible to associate and disassociate records using the Xrm.WebApi in the Client JavaScript API. Looking through the source code, I’ve come across this in the past, but it hasn’t been working in earlier releases. The interesting bits from...","categories": [],
+        "tags": ["Dynamics 365","Power Platform","JavaScript","Xrm.WebApi"],
+        "url": "/2020/associate-disassociate-entities-xrm-webapi/",
+        "teaser": null
+      },{
         "title": "Get started with Azure API Management and Dynamics 365 in 30 minutes",
         "excerpt":"Dynamics 365 comes with a robust and powerful REST API out of the box. However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons. The setup used to be somewhat convoluted, but is now much simpler. This post...","categories": [],
         "tags": ["APIM","Dynamics 365","Power Platform","Managed Identity"],

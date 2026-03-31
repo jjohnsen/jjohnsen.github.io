@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-03-31T20:17:40+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items</title><link href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="alternate" type="text/html" title="Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items" /><published>2025-02-10T00:00:00+01:00</published><updated>2025-02-10T00:00:00+01:00</updated><id>/2025/migrating-azure-devops-projects-part-2-boards-and-work-items</id><content type="html" xml:base="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/"><![CDATA[<p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps Part 2 - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts with Azure Boards highlighted" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-03-31T20:26:31+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items</title><link href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="alternate" type="text/html" title="Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items" /><published>2025-02-10T00:00:00+01:00</published><updated>2025-02-10T00:00:00+01:00</updated><id>/2025/migrating-azure-devops-projects-part-2-boards-and-work-items</id><content type="html" xml:base="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/"><![CDATA[<p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps Part 2 - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts with Azure Boards highlighted" /></p>
 
 <p>In <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">Part 1</a>, we covered how to migrate Repos and Wikis. Now we’ll look into the more complex challenge of migrating Boards and Work Items.</p>
 
@@ -280,4 +280,125 @@ Note: the URL is case sensitive.</p>
 <p>You should now be able to test the WhoAmI operation using the <em>Test</em> section:
 <img src="test-operation.png" alt="" /></p>
 
-<p>Assuming everything went according to the plan, you should receive a 200 OK response, and be ready to crank out your own API! 🥳</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="APIM" /><category term="Dynamics 365" /><category term="Power Platform" /><category term="Managed Identity" /><summary type="html"><![CDATA[Short and simple guide on how to connect APIM to Dynamics 365, using managed identities, and creating your first API endpoint.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="/add-operation.png" /><media:content medium="image" url="/add-operation.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
+<p>Assuming everything went according to the plan, you should receive a 200 OK response, and be ready to crank out your own API! 🥳</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="APIM" /><category term="Dynamics 365" /><category term="Power Platform" /><category term="Managed Identity" /><summary type="html"><![CDATA[Short and simple guide on how to connect APIM to Dynamics 365, using managed identities, and creating your first API endpoint.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="/add-operation.png" /><media:content medium="image" url="/add-operation.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Associate and disassociate entities using the Xrm.WebApi Client API</title><link href="/2020/associate-disassociate-entities-xrm-webapi/" rel="alternate" type="text/html" title="Associate and disassociate entities using the Xrm.WebApi Client API" /><published>2020-03-12T00:00:00+01:00</published><updated>2020-03-12T00:00:00+01:00</updated><id>/2020/associate-disassociate-entities-xrm-webapi</id><content type="html" xml:base="/2020/associate-disassociate-entities-xrm-webapi/"><![CDATA[<p>With <a href="https://docs.microsoft.com/en-us/dynamics365-release-plan/2020wave1/">Dynamics 365: 2020 release wave 1</a> it now looks like it’s possible to associate and disassociate records using the Xrm.WebApi in the Client JavaScript API. Looking through the source code, I’ve come across this in the past, but it hasn’t been working in earlier releases.</p>
+
+<p>The interesting bits from the source:</p>
+
+<p><img src="xrm-webapi-source.png" alt="Xrm.WebApi source code showing Associate and Disassociate operations" /></p>
+
+<p>As the <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute">documentation</a> makes no mention of the Associate and Disassociate operations I’m unsure if they are officially supported or not. <strong><em>Use with caution!</em></strong></p>
+
+<h2 id="usage">Usage:</h2>
+
+<h3 id="associate-many-to-one-n1-relations"><strong>Associate Many-to-one (N:1) relations</strong></h3>
+
+<p>I’ll get right to it, the syntax is pretty simple if you’ve used the <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/execute">execute function</a> before:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">manyToOneAssociateRequest</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">getMetadata</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">({</span>
+        <span class="na">boundParameter</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="na">parameterTypes</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="na">operationType</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="na">operationName</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Associate</span><span class="dl">"</span>
+    <span class="p">}),</span>
+    <span class="na">relationship</span><span class="p">:</span> <span class="dl">"</span><span class="s2">account_primary_contact</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">target</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">entityType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">account</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2063dcca-6c63-ea11-a811-000d3aba6eaf</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="na">relatedEntities</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="na">entityType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">contact</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">c83aab0f-6863-ea11-a811-000d3aba6eaf</span><span class="dl">"</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="nx">Xrm</span><span class="p">.</span><span class="nx">WebApi</span><span class="p">.</span><span class="nx">online</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">manyToOneAssociateRequest</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span>
+    <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Success</span><span class="dl">"</span><span class="p">,</span> <span class="nx">success</span><span class="p">);</span> <span class="p">},</span>
+    <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error</span><span class="dl">"</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="associate-one-to-many-1n-relations"><strong>Associate One-to-many (1:N) relations</strong></h3>
+
+<p>This is really just the reverse of N:1 relations:</p>
+
+<p><img src="xrm-webapi-one-to-many.png" alt="Xrm.WebApi code example showing One-to-many association" /></p>
+
+<h3 id="many-to-many-association"><strong>Many-to-many association</strong></h3>
+
+<p>I think this is the most interesting use case, as this allows association of multiple entities in one request. This goes beyond what’s supported in the <a href="https://docs.microsoft.com/en-us/powerapps/developer/common-data-service/webapi/associate-disassociate-entities-using-web-api">“raw” Web API</a>.</p>
+
+<p><em>Note: In the example below I’ve created a custom entity named jaj_role. This has a many-to-many relationship to contact named jaj_role_contact.</em></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">manyToManyAssociateRequest</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">getMetadata</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">({</span>
+        <span class="na">boundParameter</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="na">parameterTypes</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="na">operationType</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="na">operationName</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Associate</span><span class="dl">"</span>
+    <span class="p">}),</span>
+    <span class="na">relationship</span><span class="p">:</span> <span class="dl">"</span><span class="s2">jaj_role_contact</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">target</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">entityType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">contact</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">c83aab0f-6863-ea11-a811-000d3aba6eaf</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="na">relatedEntities</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="na">entityType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">jaj_role</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">aae3175e-cb63-ea11-a811-000d3aba6eaf</span><span class="dl">"</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="na">entityType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">jaj_role</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">ace3175e-cb63-ea11-a811-000d3aba6eaf</span><span class="dl">"</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="nx">Xrm</span><span class="p">.</span><span class="nx">WebApi</span><span class="p">.</span><span class="nx">online</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">manyToManyAssociateRequest</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span>
+    <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Success</span><span class="dl">"</span><span class="p">,</span> <span class="nx">success</span><span class="p">);</span> <span class="p">},</span>
+    <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error</span><span class="dl">"</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="disassociation"><strong>Disassociation</strong></h3>
+
+<p>Sadly, it looks like disassociate only supports one disassociation per request.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">disassociateRequest</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">getMetadata</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">({</span>
+        <span class="na">boundParameter</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+        <span class="na">parameterTypes</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="na">operationType</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="na">operationName</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Disassociate</span><span class="dl">"</span>
+    <span class="p">}),</span>
+    <span class="na">relationship</span><span class="p">:</span> <span class="dl">"</span><span class="s2">account_primary_contact</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">target</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">entityType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">contact</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">c83aab0f-6863-ea11-a811-000d3aba6eaf</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="na">relatedEntityId</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2063dcca-6c63-ea11-a811-000d3aba6eaf</span><span class="dl">"</span>
+<span class="p">}</span>
+
+<span class="nx">Xrm</span><span class="p">.</span><span class="nx">WebApi</span><span class="p">.</span><span class="nx">online</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">disassociateRequest</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span>
+    <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Success</span><span class="dl">"</span><span class="p">,</span> <span class="nx">success</span><span class="p">);</span> <span class="p">},</span>
+    <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error</span><span class="dl">"</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="bonus-tip-1"><strong>Bonus tip #1:</strong></h2>
+
+<p>Since we are using the Xrm.WebApi.online.execute function it should also be possible to batch the requests using the <a href="https://docs.microsoft.com/en-us/powerapps/developer/model-driven-apps/clientapi/reference/xrm-webapi/online/executemultiple">Xrm.WebApi.online.executeMultiple</a> function.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">requests</span> <span class="o">=</span> <span class="p">[</span><span class="nx">req1</span><span class="p">,</span> <span class="nx">req2</span><span class="p">,</span> <span class="nx">req3</span><span class="p">];</span>
+<span class="nx">Xrm</span><span class="p">.</span><span class="nx">WebApi</span><span class="p">.</span><span class="nx">online</span><span class="p">.</span><span class="nx">executeMultiple</span><span class="p">(</span><span class="nx">requests</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">successCallback</span><span class="p">,</span> <span class="nx">errorCallback</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="bonus-tip-2"><strong>Bonus tip #2:</strong></h2>
+
+<p>Looking through the code there is also mentions of the operations RetriveWithUrlParams and EntityDefinitions. I’ll leave it to you to figure those out 😊</p>
+
+<p><img src="xrm-webapi-bonus-operations.png" alt="Source code showing RetriveWithUrlParams and EntityDefinitions operations" /></p>
+
+<h2 id="happy-coding">Happy coding!</h2>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Dynamics 365" /><category term="Power Platform" /><category term="JavaScript" /><category term="Xrm.WebApi" /><summary type="html"><![CDATA[How to associate and disassociate records using the Xrm.WebApi.online.execute function in the Client JavaScript API.]]></summary></entry></feed>
