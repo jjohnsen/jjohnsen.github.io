@@ -1,4 +1,214 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2022-06-07T13:55:56+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Get started with Azure API Management and Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Get started with Azure API Management and Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-07T00:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-03-31T20:17:40+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items</title><link href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="alternate" type="text/html" title="Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items" /><published>2025-02-10T00:00:00+01:00</published><updated>2025-02-10T00:00:00+01:00</updated><id>/2025/migrating-azure-devops-projects-part-2-boards-and-work-items</id><content type="html" xml:base="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/"><![CDATA[<p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps Part 2 - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts with Azure Boards highlighted" /></p>
+
+<p>In <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">Part 1</a>, we covered how to migrate Repos and Wikis. Now we’ll look into the more complex challenge of migrating Boards and Work Items.</p>
+
+<p>This process is more demanding and requires additional tooling. Fortunately, <a href="https://github.com/nkdAgility/azure-devops-migration-tools">azure-devops-migration-tools</a>, created by Martin Hinshelwood, provides a way to move Work Items, Test Plans &amp; Suites, Pipelines and more between organizations.</p>
+
+<p>The learning curve can, however, be steep—but don’t worry! We’ll break it down step by step and walk through the entire process in this part. 💪</p>
+
+<h2 id="installation">💾Installation</h2>
+
+<p>Before we begin, azure-devops-migration-tools must be installed. Since it’s a Windows application, it can be installed using winget:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>winget install nkdagility.azure-devops-migration-tools
+</code></pre></div></div>
+
+<p>For other options check the <a href="https://nkdagility.com/learn/azure-devops-migration-tools/setup/installation/">installation documentation</a>.</p>
+
+<h3 id="️creating-a-config-file">✍️Creating a Config File</h3>
+
+<p>The tool runs from the command line and requires a JSON configuration file to define how the migration should be performed. A basic starting point for the config file looks as follows:</p>
+
+<p>example.conf.json:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"Serilog"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"MinimumLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Information"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MigrationTools"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Endpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"Source"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"EndpointType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TfsTeamProjectEndpoint"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Collection"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://dev.azure.com/old-org/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Project"</span><span class="p">:</span><span class="w"> </span><span class="s2">"old-project"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Authentication"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"AuthenticationMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AccessToken"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"AccessToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[Personal Access Token Old Org]"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"Target"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"EndpointType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TfsTeamProjectEndpoint"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Collection"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://dev.azure.com/new-org/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Project"</span><span class="p">:</span><span class="w"> </span><span class="s2">"new-project"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Authentication"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"AuthenticationMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AccessToken"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"AccessToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[Personal Access Token New Org]"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"ReflectedWorkItemIdField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Custom.ReflectedWorkItemId"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"CommonTools"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"TfsUserMappingTool"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"Enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"IdentityFieldsToCheck"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"System.AssignedTo"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"System.ChangedBy"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"System.CreatedBy"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"Processors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"ProcessorType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TfsWorkItemMigrationProcessor"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"WIQLQuery"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SELECT [System.Id] FROM WorkItems WHERE [System.TeamProject] = @TeamProject AND [System.WorkItemType] NOT IN ('Test Suite', 'Test Plan','Shared Steps','Shared Parameter','Feedback Request') ORDER BY [System.ChangedDate] desc"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>To use this config, you’ll need to update the following fields:</p>
+
+<ul>
+  <li><strong>Collection</strong>: The URL of your Azure DevOps source and target organizations.</li>
+  <li><strong>Project</strong>: The names of the source and target projects.</li>
+</ul>
+
+<p>💡 If the project name contains spaces, ensure the Project field reflects that exactly (don’t use HTML-encoded %20 for spaces).</p>
+
+<ul>
+  <li><strong>AccessToken</strong>: Personal Access Token (PAT) for both the source and target organizations.</li>
+</ul>
+
+<h2 id="personal-access-tokens-pat">🔐Personal Access Tokens (PAT)</h2>
+
+<p>The migration tool requires full access PAT tokens for both the source and target organizations. These can be created from User settings -&gt; Personal Access Tokens:</p>
+
+<p><img src="pat-settings.png" alt="Personal Access Token settings in Azure DevOps" /></p>
+
+<p>If your DevOps policy restricts full access, I’ve still had success by setting each individual scope to the highest level available.</p>
+
+<h2 id="️target-project-and-reflectedworkitemid-process-field">⚙️Target Project and ReflectedWorkItemId Process Field</h2>
+
+<p>The migration tool uses a special field, ReflectedWorkItemId, to track the migration of work items. This field must be created on all work items that will be migrated.</p>
+
+<p>What I usually do is create a new inherited process in the target organization that matches the source project’s process. This ensures that the ReflectedWorkItemId field is added to all work items in the target project.</p>
+
+<p>Subsequent migrations can, of course, use the same process.</p>
+
+<p><img src="inherited-process.png" alt="Creating a new inherited process in Azure DevOps" /></p>
+
+<p><img src="add-field-first.png" alt="Adding the ReflectedWorkItemId Field to the First Work Item Type (Bug)" /></p>
+
+<p><em>Adding the ReflectedWorkItemId Field to the First Work Item Type (Bug)</em></p>
+
+<p><img src="add-field-existing.png" alt="Adding the ReflectedWorkItemId Field to the Next Work Item Type when the field already exists" /></p>
+
+<p><em>Adding the ReflectedWorkItemId Field to the Next Work Item Type when the field already exists</em></p>
+
+<p>Once the ReflectedWorkItemId field has been added to all work item types, you can create the target project using the inherited process.</p>
+
+<p><img src="create-project.png" alt="Creating a project with the new inherited process" /></p>
+
+<p><em>Creating a project with the new inherited process</em></p>
+
+<p>💡Microsoft offers a separate tool for exporting and importing inherited processes. If you’ve made extensive process customizations, it’s worth checking out. You can find the tool here: <a href="https://github.com/microsoft/process-migrator">VSTS Process Migrator</a>.</p>
+
+<h2 id="board-settings">📋Board Settings</h2>
+
+<p>If you’ve customized Board Settings (such as columns or swimlanes), make sure to replicate these settings in the target project before executing the migration. This ensures that the work items are placed correctly on the target board.</p>
+
+<p><img src="board-settings.png" alt="Make sure to replicate Board settings before migration" />
+<em>Make sure to replicate Board settings before migration</em></p>
+
+<h2 id="executing-the-migrating-processes">🚀Executing the Migrating Processes</h2>
+
+<p>Given that the Source and Target configuration is correct you should now be able to start a migration with the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>devopsmigration execute --config .\example.conf.json
+</code></pre></div></div>
+
+<p>If all goes well, your work items and iterations should now be migrated successfully. Don’t forget to validate the migrated data and make any adjustments as necessary.</p>
+
+<p><img src="migration-output.png" alt="Migration execution output showing successful work item migration" /></p>
+
+<hr />
+
+<p>That concludes Part 2 of this series! ✅ Stay tuned for Part 3, where we’ll dive deeper into migrating Azure DevOps Test Plans, Pipelines, and more. 🚀</p>
+
+<hr />
+
+<h3 id="-azure-devops-migration-series-">🔹 Azure DevOps Migration Series 🔹</h3>
+
+<p><a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">🚀 Part 1: Migrating Repos &amp; Wikis</a> | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-1-jan-%C3%A5ge-johnsen-unqzf/">🔗LinkedIn</a></p>
+
+<p>📊 Part 2: Migrating Boards &amp; Work Items | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-2-boards-work-items-johnsen-igzvf/">🔗LinkedIn</a></p>
+
+<p>🧪 Part 3: (Coming soon!)</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Azure DevOps" /><category term="Migration" /><category term="Boards" /><category term="Work Items" /><summary type="html"><![CDATA[Migrating Azure DevOps Boards and Work Items between organizations using azure-devops-migration-tools.]]></summary></entry><entry><title type="html">Migrating Azure DevOps Projects - Part 1: Repos and Wikis</title><link href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" rel="alternate" type="text/html" title="Migrating Azure DevOps Projects - Part 1: Repos and Wikis" /><published>2025-02-03T00:00:00+01:00</published><updated>2025-02-03T00:00:00+01:00</updated><id>/2025/migrating-azure-devops-projects-part-1-repos-and-wikis</id><content type="html" xml:base="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/"><![CDATA[<p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts" /></p>
+
+<p>Migrating Azure DevOps projects between organizations (hopefully) isn’t something you do every day, but when the need arises—whether due to a merger, reorganization, or other reasons—it can be a challenging process.</p>
+
+<p>Breaking the work down, you’re mostly dealing with Boards/Work Items, Repos, Wikis, Pipelines, Test Plans, and Artifacts.</p>
+
+<p>You’d expect Microsoft to provide a seamless way to handle this, but unfortunately, no single tool does it all. Instead, you’ll need a mix of different tools and approaches to get the job done.</p>
+
+<p>So, let’s start with something fairly simple:</p>
+
+<h2 id="-repos">📂 Repos</h2>
+
+<p>Since you’re hopefully using Git by now, migrating Repos is fairly straightforward using the following steps:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Mirror the Existing Repository</span>
+git clone <span class="nt">--mirror</span> https://dev.azure.com/old-org/old-project/_git/repo-name
+
+<span class="c"># Push to new Repository (must be created beforehand)</span>
+<span class="nb">cd </span>repo-name.git
+git push <span class="nt">--mirror</span> https://[username]:[password]@dev.azure.com/new-org/new-project/_git/repo-name
+</code></pre></div></div>
+
+<p>Using <code class="language-plaintext highlighter-rouge">--mirror</code> ensures that all branches, tags, and Git refs are cloned and pushed, fully replicating the repository.</p>
+
+<p>If you’re moving between organizations with different credentials, it’s often easiest to use Git Credentials directly in the command line (<code class="language-plaintext highlighter-rouge">[username]:[password]</code>). You can generate these credentials from the Clone Repository panel by clicking <strong>Generate Git Credentials</strong>:</p>
+
+<p><img src="generate-git-credentials.png" alt="Azure DevOps Clone Repository dialog showing HTTPS command line URL and Generate Git Credentials button" /></p>
+
+<blockquote>
+  <p>⚠️ <strong>Important:</strong> While links from work items to commits should continue to work, the reverse—links from Git commit logs to work items—won’t. This happens because work items get new IDs during migration. I’ll cover how to handle this later in an advanced part 🤓.</p>
+</blockquote>
+
+<h2 id="-disabling-the-repository">❌ Disabling the Repository</h2>
+
+<p>After migrating the repo, it’s a good practice to disable access to the old repository. This will prevent any accidental usage while keeping the repository discoverable with a warning.</p>
+
+<p>This can be done from <strong>Manage Repository -&gt; [Repository] -&gt; Settings -&gt; Disable Repository</strong></p>
+
+<p><img src="disable-repository.png" alt="Azure DevOps disabled repository page showing 'Repository Target project is disabled' message with UFO illustration" /></p>
+
+<h2 id="-wikis">📖 Wikis</h2>
+
+<p>With the repository successfully migrated, Wikis are fairly simple to move since they are also stored as Git repositories. The only difficulty can be locating the repo URL, which can be found under the <strong>Clone wiki</strong> menu item on the Wiki page:</p>
+
+<p><img src="clone-wiki.png" alt="Azure DevOps Wiki page showing the Clone wiki option highlighted in the dropdown menu" /></p>
+
+<blockquote>
+  <p>⚠️ <strong>Important:</strong> As with commit messages, links to work items (#12345) won’t work after migration. This happens because work items get new IDs during migration. I’ll cover how to handle this later in an advanced part 🤓.</p>
+</blockquote>
+
+<hr />
+
+<p>That concludes Part 1 of this series! ✅ Stay tuned for Part 2, where we’ll dive into migrating Boards and Work Items, and in future parts, we’ll explore migrating Test Plans, Pipelines, and more. 🚀</p>
+
+<hr />
+
+<h3 id="-azure-devops-migration-series-">🔹 Azure DevOps Migration Series 🔹</h3>
+
+<p>🚀 Part 1: Migrating Repos &amp; Wikis | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-1-jan-%C3%A5ge-johnsen-unqzf/">🔗LinkedIn</a></p>
+
+<p><a href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/">📊 Part 2: Migrating Boards &amp; Work Items</a> | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-2-boards-work-items-johnsen-igzvf/">🔗LinkedIn</a></p>
+
+<p>🧪 Part 3: (Coming soon!)</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Azure DevOps" /><category term="Git" /><category term="Migration" /><category term="Wikis" /><summary type="html"><![CDATA[Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.]]></summary></entry><entry><title type="html">Get started with Azure API Management and Dynamics 365 in 30 minutes</title><link href="/2022/apim-and-crm-in-30-minutes/" rel="alternate" type="text/html" title="Get started with Azure API Management and Dynamics 365 in 30 minutes" /><published>2022-06-02T00:00:00+02:00</published><updated>2022-06-07T00:00:00+02:00</updated><id>/2022/apim-and-crm-in-30-minutes</id><content type="html" xml:base="/2022/apim-and-crm-in-30-minutes/"><![CDATA[<p>Dynamics 365 comes with a robust and powerful REST API out of the box.
 However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons.</p>
 
 <p>The setup used to be somewhat convoluted, but is now  much simpler.

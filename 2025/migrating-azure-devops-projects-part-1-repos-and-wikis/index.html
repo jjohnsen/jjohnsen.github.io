@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>Get started with Azure API Management and Dynamics 365 in 30 minutes - jjohnsen.github.io</title>
-<meta name="description" content="Short and simple guide on how to connect APIM to Dynamics 365, using managed identities, and creating your first API endpoint.">
+<!-- begin _includes/seo.html --><title>Migrating Azure DevOps Projects - Part 1: Repos and Wikis - jjohnsen.github.io</title>
+<meta name="description" content="Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.">
 
 
   <meta name="author" content="Jan-Åge Johnsen">
@@ -22,25 +22,21 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="nb_NO">
 <meta property="og:site_name" content="jjohnsen.github.io">
-<meta property="og:title" content="Get started with Azure API Management and Dynamics 365 in 30 minutes">
-<meta property="og:url" content="/2022/apim-and-crm-in-30-minutes/">
+<meta property="og:title" content="Migrating Azure DevOps Projects - Part 1: Repos and Wikis">
+<meta property="og:url" content="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">
 
 
-  <meta property="og:description" content="Short and simple guide on how to connect APIM to Dynamics 365, using managed identities, and creating your first API endpoint.">
-
-
-
-  <meta property="og:image" content="/assets/images/apim-power-platform-header.jpg">
+  <meta property="og:description" content="Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.">
 
 
 
 
 
-  <meta property="article:published_time" content="2022-06-02T00:00:00+02:00">
 
 
+  <meta property="article:published_time" content="2025-02-03T00:00:00+01:00">
 
-  <meta property="article:modified_time" content="2022-06-07T00:00:00+02:00">
+
 
 
 
@@ -49,7 +45,7 @@
   
 
 
-<link rel="canonical" href="/2022/apim-and-crm-in-30-minutes/">
+<link rel="canonical" href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">
 
 
 
@@ -144,65 +140,6 @@
 
     <div class="initial-content">
       
-  
-
-
-
-
-
-
-
-<div class="page__hero--overlay"
-  style=" background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('/assets/images/apim-power-platform-header.jpg');"
->
-  
-    <div class="wrapper">
-      <h1 id="page-title" class="page__title" itemprop="headline">
-        
-          Get started with Azure API Management and Dynamics 365 in 30 minutes
-
-        
-      </h1>
-      
-        <p class="page__lead">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
-</p>
-      
-      
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-calendar-alt" aria-hidden="true"></i>
-        
-        <time datetime="2022-06-02T00:00:00+02:00">June 2, 2022</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-clock" aria-hidden="true"></i>
-        
-          2 minute read
-        
-      </span>
-    
-  </p>
-
-
-      
-      
-    </div>
-  
-  
-</div>
-
-
 
 
 
@@ -329,12 +266,45 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="Get started with Azure API Management and Dynamics 365 in 30 minutes">
-    <meta itemprop="description" content="Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.">
-    <meta itemprop="datePublished" content="2022-06-02T00:00:00+02:00">
-    <meta itemprop="dateModified" content="2022-06-07T00:00:00+02:00">
+    <meta itemprop="headline" content="Migrating Azure DevOps Projects - Part 1: Repos and Wikis">
+    <meta itemprop="description" content="Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.">
+    <meta itemprop="datePublished" content="2025-02-03T00:00:00+01:00">
+    
 
     <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Migrating Azure DevOps Projects - Part 1: Repos and Wikis
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-03T00:00:00+01:00">February 3, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
       
 
       <section class="page__content" itemprop="text">
@@ -342,84 +312,74 @@
           <aside class="sidebar__right sticky">
             <nav class="toc">
               <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
-              <ul class="toc__menu"><li><a href="#1-create-the-api-management-service">1. Create the API Management service</a></li><li><a href="#2-create-an-app-user">2. Create an app user</a></li><li><a href="#3-creating-an-api-and-operation">3. Creating an API and operation</a></li><li><a href="#4-testing-the-api-operation">4. Testing the API operation</a></li></ul>
+              <ul class="toc__menu"><li><a href="#-repos">📂 Repos</a></li><li><a href="#-disabling-the-repository">❌ Disabling the Repository</a></li><li><a href="#-wikis">📖 Wikis</a><ul><li><a href="#-azure-devops-migration-series-">🔹 Azure DevOps Migration Series 🔹</a></li></ul></li></ul>
 
             </nav>
           </aside>
         
-        <p>Dynamics 365 comes with a robust and powerful REST API out of the box.
-However, when integrating with other parties, I prefer to use Azure API Management (APIM) as an intermediary for a multitude of reasons.</p>
+        <p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts" /></p>
 
-<p>The setup used to be somewhat convoluted, but is now  much simpler.
-This post will walk you through the steps needed for setting it up manually, while a later post will detail how to automate it though a DevOps pipeline.</p>
+<p>Migrating Azure DevOps projects between organizations (hopefully) isn’t something you do every day, but when the need arises—whether due to a merger, reorganization, or other reasons—it can be a challenging process.</p>
 
-<h2 id="1-create-the-api-management-service">1. Create the API Management service</h2>
+<p>Breaking the work down, you’re mostly dealing with Boards/Work Items, Repos, Wikis, Pipelines, Test Plans, and Artifacts.</p>
 
-<p>The first step is to install the API Management gateway, so head over to the Azure portal and create a new API Management service.</p>
+<p>You’d expect Microsoft to provide a seamless way to handle this, but unfortunately, no single tool does it all. Instead, you’ll need a mix of different tools and approaches to get the job done.</p>
 
-<p>There aren’t many options that needs to be configured, but make sure to enable <em>System assigned managed identity</em> as it will be used to connect to the Dynamics 365 instance.</p>
+<p>So, let’s start with something fairly simple:</p>
 
-<p><img src="Install-API-Management-gateway.png" alt="Install API Management gateway - Managed identity" /></p>
+<h2 id="-repos">📂 Repos</h2>
 
-<h2 id="2-create-an-app-user">2. Create an app user</h2>
+<p>Since you’re hopefully using Git by now, migrating Repos is fairly straightforward using the following steps:</p>
 
-<p>The next step is to create an app user for the managed identity, in the environment it should have access to.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Mirror the Existing Repository</span>
+git clone <span class="nt">--mirror</span> https://dev.azure.com/old-org/old-project/_git/repo-name
 
-<p>First we need the <strong>Object ID</strong> for the Managed Identity. This can be found on <em>Security -&gt; Managed identities -&gt; System assigned</em>:</p>
+<span class="c"># Push to new Repository (must be created beforehand)</span>
+<span class="nb">cd </span>repo-name.git
+git push <span class="nt">--mirror</span> https://[username]:[password]@dev.azure.com/new-org/new-project/_git/repo-name
+</code></pre></div></div>
 
-<p><img src="mi-object-id.png" alt="Object Id for Managed Identity" /></p>
+<p>Using <code class="language-plaintext highlighter-rouge">--mirror</code> ensures that all branches, tags, and Git refs are cloned and pushed, fully replicating the repository.</p>
 
-<p>Then go to <em>Azure Active Directory -&gt; Enterprise Applications</em> and search for this Object ID to find the <strong>Application ID</strong>:
-<img src="ea-application-id.png" alt="Application ID for Managed Identity" /></p>
+<p>If you’re moving between organizations with different credentials, it’s often easiest to use Git Credentials directly in the command line (<code class="language-plaintext highlighter-rouge">[username]:[password]</code>). You can generate these credentials from the Clone Repository panel by clicking <strong>Generate Git Credentials</strong>:</p>
+
+<p><img src="generate-git-credentials.png" alt="Azure DevOps Clone Repository dialog showing HTTPS command line URL and Generate Git Credentials button" /></p>
+
+<blockquote>
+  <p>⚠️ <strong>Important:</strong> While links from work items to commits should continue to work, the reverse—links from Git commit logs to work items—won’t. This happens because work items get new IDs during migration. I’ll cover how to handle this later in an advanced part 🤓.</p>
+</blockquote>
+
+<h2 id="-disabling-the-repository">❌ Disabling the Repository</h2>
+
+<p>After migrating the repo, it’s a good practice to disable access to the old repository. This will prevent any accidental usage while keeping the repository discoverable with a warning.</p>
+
+<p>This can be done from <strong>Manage Repository -&gt; [Repository] -&gt; Settings -&gt; Disable Repository</strong></p>
+
+<p><img src="disable-repository.png" alt="Azure DevOps disabled repository page showing 'Repository Target project is disabled' message with UFO illustration" /></p>
+
+<h2 id="-wikis">📖 Wikis</h2>
+
+<p>With the repository successfully migrated, Wikis are fairly simple to move since they are also stored as Git repositories. The only difficulty can be locating the repo URL, which can be found under the <strong>Clone wiki</strong> menu item on the Wiki page:</p>
+
+<p><img src="clone-wiki.png" alt="Azure DevOps Wiki page showing the Clone wiki option highlighted in the dropdown menu" /></p>
+
+<blockquote>
+  <p>⚠️ <strong>Important:</strong> As with commit messages, links to work items (#12345) won’t work after migration. This happens because work items get new IDs during migration. I’ll cover how to handle this later in an advanced part 🤓.</p>
+</blockquote>
 
 <hr />
 
-<p>Head over to the <a href="https://admin.powerplatform.microsoft.com">Power Platform admin center</a>, open the environment that APIM should get access to, click <em>S2s Apps -&gt; See all</em>:
-<img src="s2s-apps.png" alt="Enviroment details" /></p>
+<p>That concludes Part 1 of this series! ✅ Stay tuned for Part 2, where we’ll dive into migrating Boards and Work Items, and in future parts, we’ll explore migrating Test Plans, Pipelines, and more. 🚀</p>
 
-<p>Click <em>New app user</em>:
-<img src="new-app-user.png" alt="New app user" class="align-center" /></p>
+<hr />
 
-<p>In the <em>Create a new app user</em> dialog, Click <em>Add an app</em> and search for the <strong>Application ID</strong>, select to app and click <em>Add</em>:
-<img src="add-app-from-aad.png" alt="Search for Application ID" /></p>
+<h3 id="-azure-devops-migration-series-">🔹 Azure DevOps Migration Series 🔹</h3>
 
-<p>Select a <em>Business unit</em>, add <em>Security roles</em> and click <em>Create</em>:
-<img src="create-a-new-app-user.png" alt="Create a new app user" /></p>
+<p>🚀 Part 1: Migrating Repos &amp; Wikis | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-1-jan-%C3%A5ge-johnsen-unqzf/">🔗LinkedIn</a></p>
 
-<p><em>I recommend creating a separate security role for APIM, but that is outside the scope of this post.</em></p>
+<p><a href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/">📊 Part 2: Migrating Boards &amp; Work Items</a> | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-2-boards-work-items-johnsen-igzvf/">🔗LinkedIn</a></p>
 
-<h2 id="3-creating-an-api-and-operation">3. Creating an API and operation</h2>
-
-<p>To test the connection we need to create a new API with an operation that calls the Dynamics 365 REST API.</p>
-
-<p>Open the API Management service from the Azure portal, select: <em>APIs -&gt;  Add API -&gt; HTTP</em>:</p>
-
-<p><img src="define-new-api.png" alt="APIM - Define new API" /></p>
-
-<p>Select <em>Full</em>, Give the API a <em>Display name</em> (and <em>name</em>) and set the <em>Web service URL</em> to the REST API url of your dynamics instance:</p>
-
-<p><img src="create-an-http-api.png" alt="Create HTTP API" /></p>
-
-<p>From the API click <em>Add an operation</em> and fill in the <em>Display name</em>, <em>name</em> and <em>URL</em> and click <em>Save</em>.
-The existing <a href="https://docs.microsoft.com/en-us/power-apps/developer/data-platform/webapi/reference/whoami">WhoAmI</a> function is used as example here:</p>
-
-<p><img src="add-operation.png" alt="Add WhoAmI operation" />
-Note: the URL is case sensitive.</p>
-
-<p>The final step is now to tell APIM to authenticate with its managed identity.</p>
-
-<p>Open the Policy editor for the WhoAmI operation:
-<img src="edit-policy.png" alt="" /></p>
-
-<p>Add a <a href="https://docs.microsoft.com/en-us/azure/api-management/api-management-authentication-policies">authentication-managed-identity</a> policy to the inbound section with the <em>resource</em> attribute set to URI of you dynamics instance and save:
-<img src="policy-editor.png" alt="" /></p>
-
-<h2 id="4-testing-the-api-operation">4. Testing the API operation</h2>
-
-<p>You should now be able to test the WhoAmI operation using the <em>Test</em> section:
-<img src="test-operation.png" alt="" /></p>
-
-<p>Assuming everything went according to the plan, you should receive a 200 OK response, and be ready to crank out your own API! 🥳</p>
+<p>🧪 Part 3: (Coming soon!)</p>
 
         
       </section>
@@ -436,13 +396,13 @@ Note: the URL is case sensitive.</p>
     <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
     <span itemprop="keywords">
     
-      <a href="/tags/#apim" class="page__taxonomy-item" rel="tag">APIM</a><span class="sep">, </span>
+      <a href="/tags/#azure-devops" class="page__taxonomy-item" rel="tag">Azure DevOps</a><span class="sep">, </span>
     
-      <a href="/tags/#dynamics-365" class="page__taxonomy-item" rel="tag">Dynamics 365</a><span class="sep">, </span>
+      <a href="/tags/#git" class="page__taxonomy-item" rel="tag">Git</a><span class="sep">, </span>
     
-      <a href="/tags/#managed-identity" class="page__taxonomy-item" rel="tag">Managed Identity</a><span class="sep">, </span>
+      <a href="/tags/#migration" class="page__taxonomy-item" rel="tag">Migration</a><span class="sep">, </span>
     
-      <a href="/tags/#power-platform" class="page__taxonomy-item" rel="tag">Power Platform</a>
+      <a href="/tags/#wikis" class="page__taxonomy-item" rel="tag">Wikis</a>
     
     </span>
   </p>
@@ -452,7 +412,7 @@ Note: the URL is case sensitive.</p>
 
         
 
-  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-06-07">June 7, 2022</time></p>
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2025-02-03T00:00:00+01:00">February 3, 2025</time></p>
 
 
       </footer>
@@ -462,10 +422,11 @@ Note: the URL is case sensitive.</p>
       
   <nav class="pagination">
     
-      <a href="#" class="pagination--pager disabled">Previous</a>
+      <a href="/2022/apim-and-crm-in-30-minutes/" class="pagination--pager" title="Get started with Azure API Management and Dynamics 365 in 30 minutes
+">Previous</a>
     
     
-      <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" class="pagination--pager" title="Migrating Azure DevOps Projects - Part 1: Repos and Wikis
+      <a href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" class="pagination--pager" title="Migrating Azure DevOps Projects - Part 2: Boards &amp; Work Items
 ">Next</a>
     
   </nav>
@@ -537,7 +498,7 @@ Note: the URL is case sensitive.</p>
     
     <h2 class="archive__item-title no_toc" itemprop="headline">
       
-        <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" rel="permalink">Migrating Azure DevOps Projects - Part 1: Repos and Wikis
+        <a href="/2022/apim-and-crm-in-30-minutes/" rel="permalink">Get started with Azure API Management and Dynamics 365 in 30 minutes
 </a>
       
     </h2>
@@ -549,7 +510,7 @@ Note: the URL is case sensitive.</p>
       <span class="page__meta-date">
         <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
         
-        <time datetime="2025-02-03T00:00:00+01:00">February 3, 2025</time>
+        <time datetime="2022-06-02T00:00:00+02:00">June 2, 2022</time>
       </span>
     
 
@@ -569,7 +530,7 @@ Note: the URL is case sensitive.</p>
   </p>
 
 
-    <p class="archive__item-excerpt" itemprop="description">Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.
+    <p class="archive__item-excerpt" itemprop="description">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
 </p>
   </article>
 </div>

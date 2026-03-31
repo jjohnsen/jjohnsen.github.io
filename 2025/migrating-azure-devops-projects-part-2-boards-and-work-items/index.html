@@ -1,0 +1,706 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="nb" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Migrating Azure DevOps Projects - Part 2: Boards &amp; Work Items - jjohnsen.github.io</title>
+<meta name="description" content="Migrating Azure DevOps Boards and Work Items between organizations using azure-devops-migration-tools.">
+
+
+  <meta name="author" content="Jan-Åge Johnsen">
+  
+  <meta property="article:author" content="Jan-Åge Johnsen">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:site_name" content="jjohnsen.github.io">
+<meta property="og:title" content="Migrating Azure DevOps Projects - Part 2: Boards &amp; Work Items">
+<meta property="og:url" content="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/">
+
+
+  <meta property="og:description" content="Migrating Azure DevOps Boards and Work Items between organizations using azure-devops-migration-tools.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-02-10T00:00:00+01:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Jan-Åge Johnsen",
+      "url": "/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="jjohnsen.github.io Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          jjohnsen.github.io
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/profile-pic.jfif" alt="Jan-Åge Johnsen" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Jan-Åge Johnsen</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>lives and works in Norway, doing Azure, Power Platform and sometimes smart house things.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/jjohnsen" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:jan.age.johnsen@gmail.com">
+            <meta itemprop="email" content="jan.age.johnsen@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Migrating Azure DevOps Projects - Part 2: Boards &amp; Work Items">
+    <meta itemprop="description" content="Migrating Azure DevOps Boards and Work Items between organizations using azure-devops-migration-tools.">
+    <meta itemprop="datePublished" content="2025-02-10T00:00:00+01:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Migrating Azure DevOps Projects - Part 2: Boards &amp; Work Items
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-10T00:00:00+01:00">February 10, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#installation">💾Installation</a><ul><li><a href="#️creating-a-config-file">✍️Creating a Config File</a></li></ul></li><li><a href="#personal-access-tokens-pat">🔐Personal Access Tokens (PAT)</a></li><li><a href="#️target-project-and-reflectedworkitemid-process-field">⚙️Target Project and ReflectedWorkItemId Process Field</a></li><li><a href="#board-settings">📋Board Settings</a></li><li><a href="#executing-the-migrating-processes">🚀Executing the Migrating Processes</a><ul><li><a href="#-azure-devops-migration-series-">🔹 Azure DevOps Migration Series 🔹</a></li></ul></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps Part 2 - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts with Azure Boards highlighted" /></p>
+
+<p>In <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">Part 1</a>, we covered how to migrate Repos and Wikis. Now we’ll look into the more complex challenge of migrating Boards and Work Items.</p>
+
+<p>This process is more demanding and requires additional tooling. Fortunately, <a href="https://github.com/nkdAgility/azure-devops-migration-tools">azure-devops-migration-tools</a>, created by Martin Hinshelwood, provides a way to move Work Items, Test Plans &amp; Suites, Pipelines and more between organizations.</p>
+
+<p>The learning curve can, however, be steep—but don’t worry! We’ll break it down step by step and walk through the entire process in this part. 💪</p>
+
+<h2 id="installation">💾Installation</h2>
+
+<p>Before we begin, azure-devops-migration-tools must be installed. Since it’s a Windows application, it can be installed using winget:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>winget install nkdagility.azure-devops-migration-tools
+</code></pre></div></div>
+
+<p>For other options check the <a href="https://nkdagility.com/learn/azure-devops-migration-tools/setup/installation/">installation documentation</a>.</p>
+
+<h3 id="️creating-a-config-file">✍️Creating a Config File</h3>
+
+<p>The tool runs from the command line and requires a JSON configuration file to define how the migration should be performed. A basic starting point for the config file looks as follows:</p>
+
+<p>example.conf.json:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"Serilog"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"MinimumLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Information"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"MigrationTools"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16.0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Endpoints"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"Source"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"EndpointType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TfsTeamProjectEndpoint"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Collection"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://dev.azure.com/old-org/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Project"</span><span class="p">:</span><span class="w"> </span><span class="s2">"old-project"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Authentication"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"AuthenticationMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AccessToken"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"AccessToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[Personal Access Token Old Org]"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"Target"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"EndpointType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TfsTeamProjectEndpoint"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Collection"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://dev.azure.com/new-org/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Project"</span><span class="p">:</span><span class="w"> </span><span class="s2">"new-project"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Authentication"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"AuthenticationMode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AccessToken"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"AccessToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[Personal Access Token New Org]"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"ReflectedWorkItemIdField"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Custom.ReflectedWorkItemId"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"CommonTools"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"TfsUserMappingTool"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"Enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"IdentityFieldsToCheck"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"System.AssignedTo"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"System.ChangedBy"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"System.CreatedBy"</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"Processors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"ProcessorType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TfsWorkItemMigrationProcessor"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"WIQLQuery"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SELECT [System.Id] FROM WorkItems WHERE [System.TeamProject] = @TeamProject AND [System.WorkItemType] NOT IN ('Test Suite', 'Test Plan','Shared Steps','Shared Parameter','Feedback Request') ORDER BY [System.ChangedDate] desc"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>To use this config, you’ll need to update the following fields:</p>
+
+<ul>
+  <li><strong>Collection</strong>: The URL of your Azure DevOps source and target organizations.</li>
+  <li><strong>Project</strong>: The names of the source and target projects.</li>
+</ul>
+
+<p>💡 If the project name contains spaces, ensure the Project field reflects that exactly (don’t use HTML-encoded %20 for spaces).</p>
+
+<ul>
+  <li><strong>AccessToken</strong>: Personal Access Token (PAT) for both the source and target organizations.</li>
+</ul>
+
+<h2 id="personal-access-tokens-pat">🔐Personal Access Tokens (PAT)</h2>
+
+<p>The migration tool requires full access PAT tokens for both the source and target organizations. These can be created from User settings -&gt; Personal Access Tokens:</p>
+
+<p><img src="pat-settings.png" alt="Personal Access Token settings in Azure DevOps" /></p>
+
+<p>If your DevOps policy restricts full access, I’ve still had success by setting each individual scope to the highest level available.</p>
+
+<h2 id="️target-project-and-reflectedworkitemid-process-field">⚙️Target Project and ReflectedWorkItemId Process Field</h2>
+
+<p>The migration tool uses a special field, ReflectedWorkItemId, to track the migration of work items. This field must be created on all work items that will be migrated.</p>
+
+<p>What I usually do is create a new inherited process in the target organization that matches the source project’s process. This ensures that the ReflectedWorkItemId field is added to all work items in the target project.</p>
+
+<p>Subsequent migrations can, of course, use the same process.</p>
+
+<p><img src="inherited-process.png" alt="Creating a new inherited process in Azure DevOps" /></p>
+
+<p><img src="add-field-first.png" alt="Adding the ReflectedWorkItemId Field to the First Work Item Type (Bug)" /></p>
+
+<p><em>Adding the ReflectedWorkItemId Field to the First Work Item Type (Bug)</em></p>
+
+<p><img src="add-field-existing.png" alt="Adding the ReflectedWorkItemId Field to the Next Work Item Type when the field already exists" /></p>
+
+<p><em>Adding the ReflectedWorkItemId Field to the Next Work Item Type when the field already exists</em></p>
+
+<p>Once the ReflectedWorkItemId field has been added to all work item types, you can create the target project using the inherited process.</p>
+
+<p><img src="create-project.png" alt="Creating a project with the new inherited process" /></p>
+
+<p><em>Creating a project with the new inherited process</em></p>
+
+<p>💡Microsoft offers a separate tool for exporting and importing inherited processes. If you’ve made extensive process customizations, it’s worth checking out. You can find the tool here: <a href="https://github.com/microsoft/process-migrator">VSTS Process Migrator</a>.</p>
+
+<h2 id="board-settings">📋Board Settings</h2>
+
+<p>If you’ve customized Board Settings (such as columns or swimlanes), make sure to replicate these settings in the target project before executing the migration. This ensures that the work items are placed correctly on the target board.</p>
+
+<p><img src="board-settings.png" alt="Make sure to replicate Board settings before migration" />
+<em>Make sure to replicate Board settings before migration</em></p>
+
+<h2 id="executing-the-migrating-processes">🚀Executing the Migrating Processes</h2>
+
+<p>Given that the Source and Target configuration is correct you should now be able to start a migration with the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>devopsmigration execute --config .\example.conf.json
+</code></pre></div></div>
+
+<p>If all goes well, your work items and iterations should now be migrated successfully. Don’t forget to validate the migrated data and make any adjustments as necessary.</p>
+
+<p><img src="migration-output.png" alt="Migration execution output showing successful work item migration" /></p>
+
+<hr />
+
+<p>That concludes Part 2 of this series! ✅ Stay tuned for Part 3, where we’ll dive deeper into migrating Azure DevOps Test Plans, Pipelines, and more. 🚀</p>
+
+<hr />
+
+<h3 id="-azure-devops-migration-series-">🔹 Azure DevOps Migration Series 🔹</h3>
+
+<p><a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">🚀 Part 1: Migrating Repos &amp; Wikis</a> | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-1-jan-%C3%A5ge-johnsen-unqzf/">🔗LinkedIn</a></p>
+
+<p>📊 Part 2: Migrating Boards &amp; Work Items | <a href="https://www.linkedin.com/pulse/migrating-azure-devops-projects-part-2-boards-work-items-johnsen-igzvf/">🔗LinkedIn</a></p>
+
+<p>🧪 Part 3: (Coming soon!)</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#azure-devops" class="page__taxonomy-item" rel="tag">Azure DevOps</a><span class="sep">, </span>
+    
+      <a href="/tags/#boards" class="page__taxonomy-item" rel="tag">Boards</a><span class="sep">, </span>
+    
+      <a href="/tags/#migration" class="page__taxonomy-item" rel="tag">Migration</a><span class="sep">, </span>
+    
+      <a href="/tags/#work-items" class="page__taxonomy-item" rel="tag">Work Items</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2025-02-10T00:00:00+01:00">February 10, 2025</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" class="pagination--pager" title="Migrating Azure DevOps Projects - Part 1: Repos and Wikis
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" rel="permalink">Migrating Azure DevOps Projects - Part 1: Repos and Wikis
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-03T00:00:00+01:00">February 3, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2022/apim-and-crm-in-30-minutes/" rel="permalink">Get started with Azure API Management and Dynamics 365 in 30 minutes
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-06-02T00:00:00+02:00">June 2, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 Jan-Åge Johnsen. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <script data-goatcounter="https://jjohnsen-github-io.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
