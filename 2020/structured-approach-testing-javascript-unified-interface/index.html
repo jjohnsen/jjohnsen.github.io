@@ -1,0 +1,781 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="nb" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>A structured approach to testing JavaScript for the Unified Interface transition - jjohnsen.github.io</title>
+<meta name="description" content="A structured approach to testing and preparing your JavaScript customizations for the Microsoft Dynamics 365 Unified Interface transition.">
+
+
+  <meta name="author" content="Jan-Åge Johnsen">
+  
+  <meta property="article:author" content="Jan-Åge Johnsen">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:site_name" content="jjohnsen.github.io">
+<meta property="og:title" content="A structured approach to testing JavaScript for the Unified Interface transition">
+<meta property="og:url" content="/2020/structured-approach-testing-javascript-unified-interface/">
+
+
+  <meta property="og:description" content="A structured approach to testing and preparing your JavaScript customizations for the Microsoft Dynamics 365 Unified Interface transition.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-03-02T00:00:00+01:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="/2020/structured-approach-testing-javascript-unified-interface/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Jan-Åge Johnsen",
+      "url": "/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="jjohnsen.github.io Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          jjohnsen.github.io
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/profile-pic.jfif" alt="Jan-Åge Johnsen" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Jan-Åge Johnsen</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>lives and works in Norway, doing Azure, Power Platform and sometimes smart house things.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/jjohnsen" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:jan.age.johnsen@gmail.com">
+            <meta itemprop="email" content="jan.age.johnsen@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="A structured approach to testing JavaScript for the Unified Interface transition">
+    <meta itemprop="description" content="With the Dynamics 365 final transition date to Unified Interface closing in, a structured approach to testing your JavaScripts is needed.">
+    <meta itemprop="datePublished" content="2020-03-02T00:00:00+01:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">A structured approach to testing JavaScript for the Unified Interface transition
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2020-03-02T00:00:00+01:00">March 2, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#power-apps-solution-checker-doesnt-cut-it">Power Apps Solution Checker doesn’t cut it</a></li><li><a href="#create-an-inventory-of-javascripts-and-functions">Create an inventory of JavaScripts and functions</a><ul><li><a href="#doing-some-filtering">Doing some filtering…</a></li></ul></li><li><a href="#testing">Testing</a><ul><li><a href="#example-testing-session-for-account">Example testing session for account</a></li></ul></li><li><a href="#bonus-tip-1--look-out-for-event-handlers-added-through-code">Bonus tip #1 – Look out for event handlers added through code</a></li><li><a href="#bonus-tip-2--web-resources">Bonus tip #2 – Web resources</a></li><li><a href="#bonus-tip-3--dealing-with-badly-formatted--minimized-scripts">Bonus tip #3 – Dealing with badly formatted / “minimized” scripts</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p><img src="dynamics-365-header.jpg" alt="Microsoft Dynamics 365 header" /></p>
+
+<p>With Microsoft Dynamics 365 final transition date, October 2020, to Unified Interface closing in, it is high time getting your JavaScripts ready for the switch.</p>
+
+<p>If you have large solution, and especially if it’s been developed over several version of Dynamics, the task can be substantial, and a structured approach is indeed needed.</p>
+
+<h2 id="power-apps-solution-checker-doesnt-cut-it">Power Apps Solution Checker doesn’t cut it</h2>
+
+<p>While the Solution Checker can provide helpful tips about best practices and future deprecations, our experience so far, has been that it generates a lot of noise, but doesn’t actually catch (subtle) changes that breaks scripts.</p>
+
+<p>On example of this is the setValue function. The old legacy web client is quite forgiving and accepts both string and numbers as inputs for a Two Options field. The new UI, however throws an error if you try using anything but a Boolean.</p>
+
+<p>Setting a two options field with a string in the (now) old legacy client works without problems.</p>
+
+<p><img src="setvalue-legacy-client.png" alt="Setting a two options field with a string in the legacy web client" /></p>
+
+<p>Doing the same in Unified Interface throws an error!</p>
+
+<p><img src="setvalue-unified-interface-error.png" alt="Setting a two options field in Unified Interface throws an error" /></p>
+
+<p>Another example is the Xrm.WebApi.retrieveRecord (and related) functions. The entity logical name is accepted in both singular and plural form in the legacy client. In the new Unified Interface only the singular form is recognized:</p>
+
+<p><img src="retrieverecord-entity-name.png" alt="Xrm.WebApi.retrieveRecord entity logical name differences between legacy and Unified Interface" /></p>
+
+<p>The solution checker won’t warn about any of these, or other, problems. So, if you want to make sure that your solution continues to work in Unified Interface, you need to do a proper GAP analyses and really test that your scripts continue to work properly.</p>
+
+<h2 id="create-an-inventory-of-javascripts-and-functions">Create an inventory of JavaScripts and functions</h2>
+
+<p>Before you can start testing, you need to know what lives inside your solution; scripts, functions and the events triggering the functions. The best tool we’ve found for the job is Scripts Finder in XrmToolBox.</p>
+
+<p><img src="scripts-finder-xrmtoolbox.png" alt="Scripts Finder in XrmToolBox" /></p>
+
+<p>Using the tool is quite easy:</p>
+
+<ol>
+  <li>Connect to your organization</li>
+  <li>Start Scripts Finder</li>
+  <li>Click Find Scripts usage and select For all entities</li>
+  <li>Watch the spinner for some time…</li>
+  <li>Click Export to csv</li>
+  <li>Open the file in Excel</li>
+  <li>Use the Data → Text to Columns function if the file content isn’t automatically recognized</li>
+  <li>Use the Home → Sort &amp; Filter → Filter command to enable sorting and filtering in the first row</li>
+</ol>
+
+<p>You should now have an almost (more on that later…) complete list of JavaScript usage in your Solution:</p>
+
+<p><img src="scripts-finder-results.png" alt="Scripts Finder results exported to Excel showing JavaScript inventory" /></p>
+
+<h3 id="doing-some-filtering">Doing some filtering…</h3>
+
+<p>As the list contains (almost) all the scripts in the solution you should filter out those which aren’t relevant for your testing.</p>
+
+<p><img src="scripts-finder-filtering.png" alt="Filtering the Scripts Finder results in Excel" /></p>
+
+<ul>
+  <li>Filter out built-in and third-party scripts by opening the filtering drop-down on the Script Location Column and deselect unwanted scripts.</li>
+  <li>Filter out scripts on inactive forms in the Form State column.</li>
+  <li>Filter out disabled script functions in the Enabled column.</li>
+</ul>
+
+<h2 id="testing">Testing</h2>
+
+<p>You are now ready to start testing, which means starting on the top of the list and test each function in Unified Interface.</p>
+
+<p>Going down the list you should make a note of the following columns:</p>
+
+<ul>
+  <li><strong>Entity Logical Name</strong> – tells you which entity to test</li>
+  <li><strong>Form Name</strong> – tells you which form to test</li>
+  <li><strong>Event</strong> – tells you which event that will triggers the function</li>
+  <li><strong>Control</strong> – tells you which control (if any) triggers the function</li>
+  <li><strong>Script Location</strong> – tells you which script to look for</li>
+  <li><strong>Method Called</strong> – tells you the method you should test</li>
+</ul>
+
+<h3 id="example-testing-session-for-account">Example testing session for account</h3>
+
+<p><img src="testing-session-account.png" alt="Example testing session showing script functions for the account entity" /></p>
+
+<p>Looking at the above image: for the Sales Insights form on the account entity we should test the setCreditonhold function and loadAnotherAccount function in the lv_unified_breakage.js file. (The last line just tells us that lv_unified_breakage.js is added to the form).</p>
+
+<p>Fire up Chrome (or a similar chromium browser) and open the Sales Insights form on the account entity.</p>
+
+<p>Open developer tools and press CTRL-P and search for the script file and select it:</p>
+
+<p><img src="devtools-search-script.png" alt="Chrome DevTools - searching for a script file with CTRL-P" /></p>
+
+<p>The script file will open breakpoints can be added to the setCreditonhold function and loadAnotherAccount function:</p>
+
+<p><img src="devtools-breakpoints.png" alt="Chrome DevTools - adding breakpoints to JavaScript functions" /></p>
+
+<p>Setting breakpoints will allow stepping though the functions when they are triggered and verify that they work as intended. For functions with branching logic you would typically add breakpoints to each branch and test them individually.</p>
+
+<p>All that is left is to trigger the setCreditonhold function by loading the form and the loadAnotherAccount function by changing the product and wish you:</p>
+
+<p>Happy testing 😊</p>
+
+<h2 id="bonus-tip-1--look-out-for-event-handlers-added-through-code">Bonus tip #1 – Look out for event handlers added through code</h2>
+
+<p>The report from Scripts Finder does not include event handlers added through code with addOnChange, addOnLoad, etc. so remember to look for them when going through script files.</p>
+
+<h2 id="bonus-tip-2--web-resources">Bonus tip #2 – Web resources</h2>
+
+<p>JavaScript added to web resources (as files or inline) are not included in the report from Scripts Finder so remember to test them as well.</p>
+
+<h2 id="bonus-tip-3--dealing-with-badly-formatted--minimized-scripts">Bonus tip #3 – Dealing with badly formatted / “minimized” scripts</h2>
+
+<p>Chrome pretty print function can help you deal with this:</p>
+
+<p><img src="devtools-pretty-print.png" alt="Chrome DevTools pretty print function for formatting minimized scripts" /></p>
+
+<hr />
+
+<p><em>Originally published on <a href="https://www.linkedin.com/pulse/structured-approach-testing-javascript-unified-jan-%C3%A5ge-johnsen/">LinkedIn</a>.</em></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#dynamics-365" class="page__taxonomy-item" rel="tag">Dynamics 365</a><span class="sep">, </span>
+    
+      <a href="/tags/#javascript" class="page__taxonomy-item" rel="tag">JavaScript</a><span class="sep">, </span>
+    
+      <a href="/tags/#testing" class="page__taxonomy-item" rel="tag">Testing</a><span class="sep">, </span>
+    
+      <a href="/tags/#unified-interface" class="page__taxonomy-item" rel="tag">Unified Interface</a>
+    
+    </span>
+  </p>
+
+
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#dynamics-365" class="page__taxonomy-item" rel="tag">Dynamics 365</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-03-02T00:00:00+01:00">March 2, 2020</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="#" class="pagination--pager disabled">Previous</a>
+    
+    
+      <a href="/2020/hacking-dyn365-scripts-like-a-boss/" class="pagination--pager" title="Hacking #dyn365 scripts like a boss😎
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="permalink">Migrating Azure DevOps Projects - Part 2: Boards &amp; Work Items
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-10T00:00:00+01:00">February 10, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Migrating Azure DevOps Boards and Work Items between organizations using azure-devops-migration-tools.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" rel="permalink">Migrating Azure DevOps Projects - Part 1: Repos and Wikis
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-03T00:00:00+01:00">February 3, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2022/apim-and-crm-in-30-minutes/" rel="permalink">Get started with Azure API Management and Dynamics 365 in 30 minutes
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2022-06-02T00:00:00+02:00">June 2, 2022</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Short and simple guide on how to connect APIM to Dynamics 365 using managed identities, and creating your first API endpoint.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2020/associate-disassociate-entities-xrm-webapi/" rel="permalink">Associate and disassociate entities using the Xrm.WebApi Client API
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2020-03-12T00:00:00+01:00">March 12, 2020</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">How to associate and disassociate records using the Xrm.WebApi.online.execute function in the Client JavaScript API.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 Jan-Åge Johnsen. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <script data-goatcounter="https://jjohnsen-github-io.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

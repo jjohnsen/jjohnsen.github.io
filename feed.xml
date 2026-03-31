@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-03-31T20:26:31+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items</title><link href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="alternate" type="text/html" title="Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items" /><published>2025-02-10T00:00:00+01:00</published><updated>2025-02-10T00:00:00+01:00</updated><id>/2025/migrating-azure-devops-projects-part-2-boards-and-work-items</id><content type="html" xml:base="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/"><![CDATA[<p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps Part 2 - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts with Azure Boards highlighted" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-03-31T20:39:49+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items</title><link href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="alternate" type="text/html" title="Migrating Azure DevOps Projects - Part 2: Boards &amp;amp; Work Items" /><published>2025-02-10T00:00:00+01:00</published><updated>2025-02-10T00:00:00+01:00</updated><id>/2025/migrating-azure-devops-projects-part-2-boards-and-work-items</id><content type="html" xml:base="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/"><![CDATA[<p><img src="migrating-azure-devops-header.png" alt="Migrating Azure DevOps Part 2 - illustration showing Azure Boards, Azure Repos, Azure Pipelines, Azure Test Plans, and Azure Artifacts with Azure Boards highlighted" /></p>
 
 <p>In <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/">Part 1</a>, we covered how to migrate Repos and Wikis. Now we’ll look into the more complex challenge of migrating Boards and Work Items.</p>
 
@@ -401,4 +401,171 @@ Note: the URL is case sensitive.</p>
 
 <p><img src="xrm-webapi-bonus-operations.png" alt="Source code showing RetriveWithUrlParams and EntityDefinitions operations" /></p>
 
-<h2 id="happy-coding">Happy coding!</h2>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Dynamics 365" /><category term="Power Platform" /><category term="JavaScript" /><category term="Xrm.WebApi" /><summary type="html"><![CDATA[How to associate and disassociate records using the Xrm.WebApi.online.execute function in the Client JavaScript API.]]></summary></entry></feed>
+<h2 id="happy-coding">Happy coding!</h2>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Dynamics 365" /><category term="Power Platform" /><category term="JavaScript" /><category term="Xrm.WebApi" /><summary type="html"><![CDATA[How to associate and disassociate records using the Xrm.WebApi.online.execute function in the Client JavaScript API.]]></summary></entry><entry><title type="html">Hacking #dyn365 scripts like a boss😎</title><link href="/2020/hacking-dyn365-scripts-like-a-boss/" rel="alternate" type="text/html" title="Hacking #dyn365 scripts like a boss😎" /><published>2020-03-08T00:00:00+01:00</published><updated>2020-03-08T00:00:00+01:00</updated><id>/2020/hacking-dyn365-scripts-like-a-boss</id><content type="html" xml:base="/2020/hacking-dyn365-scripts-like-a-boss/"><![CDATA[<p><em>Disclaimer: This is by no means a new trick, it’s not limited to Dynamics 365 and I’m certainly not the first one to <a href="https://www.trysmudford.com/blog/chrome-local-overrides/">write about it</a>. However, it saves me a lot of time when debugging or prototyping, and since I still run into people who haven’t seen it, I thought I should share!</em></p>
+
+<h2 id="tldr">tl;dr</h2>
+
+<p>Use Chrome Local Overrides to edit JavaScript directly in the browser:</p>
+
+<p><img src="chrome-local-overrides.gif" alt="Chrome Developer Tools showing Local Overrides with a JavaScript file open for editing" /></p>
+
+<h2 id="long-version">Long version</h2>
+
+<ol>
+  <li>Open Chrome Developer Tools</li>
+  <li>Click on the “Sources” tab</li>
+  <li>Click “Show navigator”, if it’s not expanded</li>
+  <li>Select the “Overrides” tab</li>
+  <li>Click “Select folder for override” to select which folder to store local overrides</li>
+  <li>Allow Chrome access to the folder</li>
+  <li>Reload the browser window</li>
+  <li>Use Ctrl + P and search for the JavaScript file you want to edit</li>
+  <li>Do your edits</li>
+  <li>Use Ctrl + S to save the file (locally)</li>
+  <li>Reload the browser window to watch the changes take effect</li>
+</ol>
+
+<h2 id="bring-your-own-editor">Bring your own editor</h2>
+
+<p>Chrome also listens to local changes to the overridden files. This means that you can also use another editor to make changes to the files.</p>
+
+<p><img src="bring-your-own-editor.gif" alt="Dynamics 365 form side by side with Chrome DevTools, editing an overridden JavaScript file" /></p>
+
+<p>My thoughts about using this feature:</p>
+
+<h2 id="the-good">The good</h2>
+
+<ul>
+  <li>It cuts down the developer feedback loop – just save and reload. No need to edit, transpile, upload, publish, reload, test.</li>
+  <li>You have all the tooling readily available, right inside Chrome. No need to open / install Visual Studio, Git, XrmToolkit, etc.</li>
+  <li>Since you are only making changes to your local environment, you don’t risk wrecking anything for other people working in the same solution. This can be especially handy if you have to do some work directly in production… 🙀</li>
+</ul>
+
+<h2 id="the-bad">The bad</h2>
+
+<ul>
+  <li>Doesn’t fit very well with workflows using TypeScript, or other ES variants, which needs to be transpiled.</li>
+  <li>It smells like an anti-pattern, and since your changes aren’t backed by source control it’s easy to lose track of changes. Therefor I would try to limit this trick to debugging and prototyping.</li>
+</ul>
+
+<h2 id="the-ugly">The ugly</h2>
+
+<ul>
+  <li>Every time you publish a new version of the script in Dynamics, the resource path (URI) is updated. This leads to Chrome losing the link between the remote and local file, and you must store a new file, locally, if you want to make future edits. This makes integration with build tools and source control difficult.</li>
+</ul>
+
+<h3 id="so-be-aware-of-the-pitfalls-and-keep-on-hacking-in-the-free-world-">So be aware of the pitfalls, and keep on hacking in the free world 🐱‍💻!</h3>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Dynamics 365" /><category term="JavaScript" /><category term="Chrome" /><category term="Debugging" /><summary type="html"><![CDATA[Use Chrome Local Overrides to edit Dynamics 365 JavaScript directly in the browser — cutting down the developer feedback loop.]]></summary></entry><entry><title type="html">A structured approach to testing JavaScript for the Unified Interface transition</title><link href="/2020/structured-approach-testing-javascript-unified-interface/" rel="alternate" type="text/html" title="A structured approach to testing JavaScript for the Unified Interface transition" /><published>2020-03-02T00:00:00+01:00</published><updated>2020-03-02T00:00:00+01:00</updated><id>/2020/structured-approach-testing-javascript-unified-interface</id><content type="html" xml:base="/2020/structured-approach-testing-javascript-unified-interface/"><![CDATA[<p><img src="dynamics-365-header.jpg" alt="Microsoft Dynamics 365 header" /></p>
+
+<p>With Microsoft Dynamics 365 final transition date, October 2020, to Unified Interface closing in, it is high time getting your JavaScripts ready for the switch.</p>
+
+<p>If you have large solution, and especially if it’s been developed over several version of Dynamics, the task can be substantial, and a structured approach is indeed needed.</p>
+
+<h2 id="power-apps-solution-checker-doesnt-cut-it">Power Apps Solution Checker doesn’t cut it</h2>
+
+<p>While the Solution Checker can provide helpful tips about best practices and future deprecations, our experience so far, has been that it generates a lot of noise, but doesn’t actually catch (subtle) changes that breaks scripts.</p>
+
+<p>On example of this is the setValue function. The old legacy web client is quite forgiving and accepts both string and numbers as inputs for a Two Options field. The new UI, however throws an error if you try using anything but a Boolean.</p>
+
+<p>Setting a two options field with a string in the (now) old legacy client works without problems.</p>
+
+<p><img src="setvalue-legacy-client.png" alt="Setting a two options field with a string in the legacy web client" /></p>
+
+<p>Doing the same in Unified Interface throws an error!</p>
+
+<p><img src="setvalue-unified-interface-error.png" alt="Setting a two options field in Unified Interface throws an error" /></p>
+
+<p>Another example is the Xrm.WebApi.retrieveRecord (and related) functions. The entity logical name is accepted in both singular and plural form in the legacy client. In the new Unified Interface only the singular form is recognized:</p>
+
+<p><img src="retrieverecord-entity-name.png" alt="Xrm.WebApi.retrieveRecord entity logical name differences between legacy and Unified Interface" /></p>
+
+<p>The solution checker won’t warn about any of these, or other, problems. So, if you want to make sure that your solution continues to work in Unified Interface, you need to do a proper GAP analyses and really test that your scripts continue to work properly.</p>
+
+<h2 id="create-an-inventory-of-javascripts-and-functions">Create an inventory of JavaScripts and functions</h2>
+
+<p>Before you can start testing, you need to know what lives inside your solution; scripts, functions and the events triggering the functions. The best tool we’ve found for the job is Scripts Finder in XrmToolBox.</p>
+
+<p><img src="scripts-finder-xrmtoolbox.png" alt="Scripts Finder in XrmToolBox" /></p>
+
+<p>Using the tool is quite easy:</p>
+
+<ol>
+  <li>Connect to your organization</li>
+  <li>Start Scripts Finder</li>
+  <li>Click Find Scripts usage and select For all entities</li>
+  <li>Watch the spinner for some time…</li>
+  <li>Click Export to csv</li>
+  <li>Open the file in Excel</li>
+  <li>Use the Data → Text to Columns function if the file content isn’t automatically recognized</li>
+  <li>Use the Home → Sort &amp; Filter → Filter command to enable sorting and filtering in the first row</li>
+</ol>
+
+<p>You should now have an almost (more on that later…) complete list of JavaScript usage in your Solution:</p>
+
+<p><img src="scripts-finder-results.png" alt="Scripts Finder results exported to Excel showing JavaScript inventory" /></p>
+
+<h3 id="doing-some-filtering">Doing some filtering…</h3>
+
+<p>As the list contains (almost) all the scripts in the solution you should filter out those which aren’t relevant for your testing.</p>
+
+<p><img src="scripts-finder-filtering.png" alt="Filtering the Scripts Finder results in Excel" /></p>
+
+<ul>
+  <li>Filter out built-in and third-party scripts by opening the filtering drop-down on the Script Location Column and deselect unwanted scripts.</li>
+  <li>Filter out scripts on inactive forms in the Form State column.</li>
+  <li>Filter out disabled script functions in the Enabled column.</li>
+</ul>
+
+<h2 id="testing">Testing</h2>
+
+<p>You are now ready to start testing, which means starting on the top of the list and test each function in Unified Interface.</p>
+
+<p>Going down the list you should make a note of the following columns:</p>
+
+<ul>
+  <li><strong>Entity Logical Name</strong> – tells you which entity to test</li>
+  <li><strong>Form Name</strong> – tells you which form to test</li>
+  <li><strong>Event</strong> – tells you which event that will triggers the function</li>
+  <li><strong>Control</strong> – tells you which control (if any) triggers the function</li>
+  <li><strong>Script Location</strong> – tells you which script to look for</li>
+  <li><strong>Method Called</strong> – tells you the method you should test</li>
+</ul>
+
+<h3 id="example-testing-session-for-account">Example testing session for account</h3>
+
+<p><img src="testing-session-account.png" alt="Example testing session showing script functions for the account entity" /></p>
+
+<p>Looking at the above image: for the Sales Insights form on the account entity we should test the setCreditonhold function and loadAnotherAccount function in the lv_unified_breakage.js file. (The last line just tells us that lv_unified_breakage.js is added to the form).</p>
+
+<p>Fire up Chrome (or a similar chromium browser) and open the Sales Insights form on the account entity.</p>
+
+<p>Open developer tools and press CTRL-P and search for the script file and select it:</p>
+
+<p><img src="devtools-search-script.png" alt="Chrome DevTools - searching for a script file with CTRL-P" /></p>
+
+<p>The script file will open breakpoints can be added to the setCreditonhold function and loadAnotherAccount function:</p>
+
+<p><img src="devtools-breakpoints.png" alt="Chrome DevTools - adding breakpoints to JavaScript functions" /></p>
+
+<p>Setting breakpoints will allow stepping though the functions when they are triggered and verify that they work as intended. For functions with branching logic you would typically add breakpoints to each branch and test them individually.</p>
+
+<p>All that is left is to trigger the setCreditonhold function by loading the form and the loadAnotherAccount function by changing the product and wish you:</p>
+
+<p>Happy testing 😊</p>
+
+<h2 id="bonus-tip-1--look-out-for-event-handlers-added-through-code">Bonus tip #1 – Look out for event handlers added through code</h2>
+
+<p>The report from Scripts Finder does not include event handlers added through code with addOnChange, addOnLoad, etc. so remember to look for them when going through script files.</p>
+
+<h2 id="bonus-tip-2--web-resources">Bonus tip #2 – Web resources</h2>
+
+<p>JavaScript added to web resources (as files or inline) are not included in the report from Scripts Finder so remember to test them as well.</p>
+
+<h2 id="bonus-tip-3--dealing-with-badly-formatted--minimized-scripts">Bonus tip #3 – Dealing with badly formatted / “minimized” scripts</h2>
+
+<p>Chrome pretty print function can help you deal with this:</p>
+
+<p><img src="devtools-pretty-print.png" alt="Chrome DevTools pretty print function for formatting minimized scripts" /></p>
+
+<hr />
+
+<p><em>Originally published on <a href="https://www.linkedin.com/pulse/structured-approach-testing-javascript-unified-jan-%C3%A5ge-johnsen/">LinkedIn</a>.</em></p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Dynamics 365" /><category term="JavaScript" /><category term="Unified Interface" /><category term="Dynamics 365" /><category term="Testing" /><summary type="html"><![CDATA[A structured approach to testing and preparing your JavaScript customizations for the Microsoft Dynamics 365 Unified Interface transition.]]></summary></entry></feed>

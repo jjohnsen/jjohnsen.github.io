@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>/2020/structured-approach-testing-javascript-unified-interface/</loc>
+<lastmod>2020-03-02T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>/2020/hacking-dyn365-scripts-like-a-boss/</loc>
+<lastmod>2020-03-08T00:00:00+01:00</lastmod>
+</url>
+<url>
 <loc>/2020/associate-disassociate-entities-xrm-webapi/</loc>
 <lastmod>2020-03-12T00:00:00+01:00</lastmod>
 </url>
@@ -30,6 +38,6 @@
 </url>
 <url>
 <loc>/googlec37abe0bb30a1a91.html</loc>
-<lastmod>2026-03-31T20:26:00+02:00</lastmod>
+<lastmod>2026-03-31T20:39:14+02:00</lastmod>
 </url>
 </urlset>

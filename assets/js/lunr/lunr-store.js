@@ -1,4 +1,16 @@
 var store = [{
+        "title": "A structured approach to testing JavaScript for the Unified Interface transition",
+        "excerpt":"With Microsoft Dynamics 365 final transition date, October 2020, to Unified Interface closing in, it is high time getting your JavaScripts ready for the switch. If you have large solution, and especially if it’s been developed over several version of Dynamics, the task can be substantial, and a structured approach...","categories": ["Dynamics 365"],
+        "tags": ["JavaScript","Unified Interface","Dynamics 365","Testing"],
+        "url": "/2020/structured-approach-testing-javascript-unified-interface/",
+        "teaser": null
+      },{
+        "title": "Hacking #dyn365 scripts like a boss😎",
+        "excerpt":"Disclaimer: This is by no means a new trick, it’s not limited to Dynamics 365 and I’m certainly not the first one to write about it. However, it saves me a lot of time when debugging or prototyping, and since I still run into people who haven’t seen it, I...","categories": [],
+        "tags": ["Dynamics 365","JavaScript","Chrome","Debugging"],
+        "url": "/2020/hacking-dyn365-scripts-like-a-boss/",
+        "teaser": null
+      },{
         "title": "Associate and disassociate entities using the Xrm.WebApi Client API",
         "excerpt":"With Dynamics 365: 2020 release wave 1 it now looks like it’s possible to associate and disassociate records using the Xrm.WebApi in the Client JavaScript API. Looking through the source code, I’ve come across this in the past, but it hasn’t been working in earlier releases. The interesting bits from...","categories": [],
         "tags": ["Dynamics 365","Power Platform","JavaScript","Xrm.WebApi"],
