@@ -1,0 +1,827 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="nb" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Proxmox Network Isolation - Isolate LXC Container from Local Network - jjohnsen.github.io</title>
+<meta name="description" content="Set up a Proxmox LXC container with isolated network access - allow outbound internet traffic while blocking access to the local network.">
+
+
+  <meta name="author" content="Jan-Åge Johnsen">
+  
+  <meta property="article:author" content="Jan-Åge Johnsen">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:site_name" content="jjohnsen.github.io">
+<meta property="og:title" content="Proxmox Network Isolation - Isolate LXC Container from Local Network">
+<meta property="og:url" content="/2026/proxmox-network-isolation/">
+
+
+  <meta property="og:description" content="Set up a Proxmox LXC container with isolated network access - allow outbound internet traffic while blocking access to the local network.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-04-14T00:00:00+02:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="/2026/proxmox-network-isolation/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "Jan-Åge Johnsen",
+      "url": "/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="jjohnsen.github.io Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          jjohnsen.github.io
+          
+        </a>
+        <ul class="visible-links"></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/profile-pic.jfif" alt="Jan-Åge Johnsen" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Jan-Åge Johnsen</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>lives and works in Norway, doing Azure, Power Platform and sometimes smart house things.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/jjohnsen" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:jan.age.johnsen@gmail.com">
+            <meta itemprop="email" content="jan.age.johnsen@gmail.com" />
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Proxmox Network Isolation - Isolate LXC Container from Local Network">
+    <meta itemprop="description" content="Set up a Proxmox LXC container with isolated network access - allow outbound internet traffic while blocking access to the local network.">
+    <meta itemprop="datePublished" content="2026-04-14T00:00:00+02:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Proxmox Network Isolation - Isolate LXC Container from Local Network
+</h1>
+          
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2026-04-14T00:00:00+02:00">April 14, 2026</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#why-network-isolation">Why Network Isolation?</a></li><li><a href="#what-youll-achieve">What You’ll Achieve</a></li><li><a href="#step-by-step-setup">Step-by-Step Setup</a><ul><li><a href="#step-1-create-an-isolated-bridge-on-proxmox">Step 1: Create an Isolated Bridge on Proxmox</a></li><li><a href="#step-2-restart-networking">Step 2: Restart Networking</a></li><li><a href="#step-3-attach-container-to-the-isolated-bridge">Step 3: Attach Container to the Isolated Bridge</a></li></ul></li><li><a href="#verification">Verification</a></li><li><a href="#debugging-network-issues">Debugging Network Issues</a></li><li><a href="#ending">Ending</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p>When you run a service like WordPress in your homelab and expose it to the internet (via Cloudflare Tunnel, reverse proxy, etc.), you’re creating an entry point that the outside world can reach. By default, this container sits on your home network alongside other devices, and if it’s compromised, an attacker could pivot to attack your NAS, Proxmox host, or other devices on the LAN.</p>
+
+<p>The practical question is: does your WordPress container actually <em>need</em> access to your internal network? The answer is almost always no. WordPress needs internet access to fetch updates, plugins, and reach Cloudflare. But it has no legitimate reason to reach other devices on your LAN.</p>
+
+<p>Network isolation enforces this principle: the container gets full internet access via NAT, but is explicitly denied access to your local network. If WordPress is compromised by a vulnerability or malicious plugin, an attacker cannot pivot internally to attack your infrastructure. 🛡️</p>
+
+<h2 id="why-network-isolation">Why Network Isolation?</h2>
+
+<ul>
+  <li><strong>Security by default</strong> — limit the blast radius if a container is compromised</li>
+  <li><strong>Network segmentation</strong> — different containers have different trust levels and access requirements</li>
+  <li><strong>Compliance-like boundaries</strong> — enforce what each service should reach</li>
+  <li><strong>Simplified troubleshooting</strong> — catch unintended network access patterns</li>
+</ul>
+
+<h2 id="what-youll-achieve">What You’ll Achieve</h2>
+
+<ul>
+  <li>✅ Container gets internet access via NAT</li>
+  <li>✅ Container cannot reach your local LAN</li>
+  <li>✅ DNS works via public resolvers or Tailscale</li>
+  <li>✅ WordPress hosted on the container is accessible through Cloudflare Tunnel</li>
+</ul>
+
+<h2 id="step-by-step-setup">Step-by-Step Setup</h2>
+
+<h3 id="step-1-create-an-isolated-bridge-on-proxmox">Step 1: Create an Isolated Bridge on Proxmox</h3>
+
+<p>SSH into your Proxmox host and edit the network config:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano /etc/network/interfaces
+</code></pre></div></div>
+
+<p>Add a new bridge with no physical uplink (this is the isolation magic):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>auto vmbr1
+iface vmbr1 inet static
+        address 10.10.10.1/24
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+        post-up iptables -t nat -A POSTROUTING -s '10.10.10.0/24' -o vmbr0 -j MASQUERADE
+        post-up iptables -I FORWARD 1 -i vmbr1 -d 192.168.1.0/24 -j REJECT
+        post-down iptables -t nat -D POSTROUTING -s '10.10.10.0/24' -o vmbr0 -j MASQUERADE
+        post-down iptables -D FORWARD -i vmbr1 -d 192.168.1.0/24 -j REJECT        
+</code></pre></div></div>
+
+<p>What each line does:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Line</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">address 10.10.10.1/24</code></td>
+      <td>Gateway IP for the isolated subnet</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bridge-ports none</code></td>
+      <td>No physical NIC attached — this prevents LAN traffic</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">post-up iptables -t nat...MASQUERADE</code></td>
+      <td>Enable NAT so container traffic leaves the Proxmox host</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">post-up iptables -I FORWARD...-d 192.168.1.0/24</code></td>
+      <td>Block forwarding to your LAN</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">post-down iptables -t nat...-D</code></td>
+      <td>Clean up the NAT rule when bridge stops</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">post-down iptables -D FORWARD</code></td>
+      <td>Clean up the block rule</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Enable IPv4 forwarding (required for NAT):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"net.ipv4.ip_forward=1"</span> <span class="o">&gt;&gt;</span> /etc/sysctl.conf
+sysctl <span class="nt">-p</span> <span class="c"># Apply immediately</span>
+</code></pre></div></div>
+
+<h3 id="step-2-restart-networking">Step 2: Restart Networking</h3>
+
+<p>Bring up the new bridge:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ifdown vmbr1 <span class="o">&amp;&amp;</span> ifup vmbr1
+</code></pre></div></div>
+
+<p>Verify it exists:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip addr show vmbr1
+brctl show vmbr1
+</code></pre></div></div>
+
+<p>Verify the NAT and FORWARD rules were added:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables <span class="nt">-t</span> nat <span class="nt">-L</span> POSTROUTING <span class="nt">-n</span> <span class="nt">-v</span>
+iptables <span class="nt">-L</span> FORWARD <span class="nt">-n</span> <span class="nt">-v</span>
+</code></pre></div></div>
+
+<h3 id="step-3-attach-container-to-the-isolated-bridge">Step 3: Attach Container to the Isolated Bridge</h3>
+
+<p>In the Proxmox web UI:</p>
+
+<ol>
+  <li>Open your container</li>
+  <li>Go to <strong>Network</strong></li>
+  <li>Open the <strong>Network Device</strong></li>
+  <li>Change <strong>Bridge</strong> from <code class="language-plaintext highlighter-rouge">vmbr0</code> to <code class="language-plaintext highlighter-rouge">vmbr1</code></li>
+  <li>Set the IP Configuration to Static and use an IP in the subnet</li>
+  <li>Go to <strong>DNS</strong></li>
+  <li>Set the DNS Servers to <code class="language-plaintext highlighter-rouge">1.1.1.1 1.0.0.1</code> (Cloudflare DNS) or your preferred public DNS</li>
+  <li>Reboot the container to apply all changes</li>
+</ol>
+
+<p><img src="proxmox-lxc-network-device-vmbr1-static-ip.png" alt="Proxmox LXC network device settings using vmbr1 with static IP 10.10.10.2 and gateway 10.10.10.1" />
+<img src="proxmox-lxc-dns-servers-cloudflare.png" alt="Proxmox LXC DNS settings configured with Cloudflare DNS servers 1.1.1.1 and 1.0.0.1" /></p>
+
+<h2 id="verification">Verification</h2>
+
+<p>Inside the container, run these tests:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Test 1: Can reach the gateway (required for any external traffic)</span>
+ping <span class="nt">-c</span> 3 10.10.10.1
+
+<span class="c"># Test 2: Can reach the internet (NAT working)</span>
+ping <span class="nt">-c</span> 3 1.1.1.1
+
+<span class="c"># Test 3: Cannot reach local network (isolation working)</span>
+<span class="c"># Use an actual IP from your LAN, e.g., your NAS or router</span>
+ping <span class="nt">-c</span> 3 192.168.1.15
+
+<span class="c"># Test 4: DNS works</span>
+nslookup vg.no
+</code></pre></div></div>
+
+<p>Expected results:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✅ ping 10.10.10.1 — success (2 packets → 2 received)
+✅ ping 1.1.1.1 — success (3 packets → 3 received)
+❌ ping 192.168.1.15 — fails (Destination Host Unreachable or Port Unreachable)
+✅ nslookup vg.no — resolves and returns an IP
+</code></pre></div></div>
+
+<h2 id="debugging-network-issues">Debugging Network Issues</h2>
+
+<p>If internet fails, verify on the Proxmox host:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check IP forwarding is enabled</span>
+sysctl net.ipv4.ip_forward
+
+<span class="c"># Check NAT rule exists</span>
+iptables <span class="nt">-t</span> nat <span class="nt">-L</span> POSTROUTING <span class="nt">-n</span> <span class="nt">-v</span>
+
+<span class="c"># Check bridge membership</span>
+brctl show vmbr1
+
+<span class="c"># Test connectivity from host</span>
+ping <span class="nt">-c</span> 1 10.10.10.2
+</code></pre></div></div>
+
+<h2 id="ending">Ending</h2>
+
+<p>This setup gives you a practical security boundary for internet-facing homelab services: keep outbound internet access for updates and integrations, while blocking lateral movement into your LAN.</p>
+
+<p>For me, this is now a baseline pattern in Proxmox: if a service is exposed publicly, it should live on an isolated bridge with explicit egress rules instead of full LAN trust.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#homelab" class="page__taxonomy-item" rel="tag">Homelab</a><span class="sep">, </span>
+    
+      <a href="/tags/#lxc" class="page__taxonomy-item" rel="tag">LXC</a><span class="sep">, </span>
+    
+      <a href="/tags/#network" class="page__taxonomy-item" rel="tag">Network</a><span class="sep">, </span>
+    
+      <a href="/tags/#proxmox" class="page__taxonomy-item" rel="tag">Proxmox</a><span class="sep">, </span>
+    
+      <a href="/tags/#security" class="page__taxonomy-item" rel="tag">Security</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2026-04-14T00:00:00+02:00">April 14, 2026</time></p>
+
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2026/esphome-altherma-monitor-daikin-heat-pump/" class="pagination--pager" title="ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2026/esphome-altherma-monitor-daikin-heat-pump/" rel="permalink">ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2026-01-05T00:00:00+01:00">January 5, 2026</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A native ESPHome custom component for monitoring Daikin Altherma 3 heat pumps via the X10A connector - with browser-based installation and Home Assistant aut...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="permalink">Migrating Azure DevOps Projects - Part 2: Boards &amp; Work Items
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-10T00:00:00+01:00">February 10, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Migrating Azure DevOps Boards and Work Items between organizations using azure-devops-migration-tools.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" rel="permalink">Migrating Azure DevOps Projects - Part 1: Repos and Wikis
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-03T00:00:00+01:00">February 3, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/2023/getting-started-with-power-pages-vuejs/" rel="permalink">Getting started with Power Pages + Vue.js
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2023-11-15T00:00:00+01:00">November 15, 2023</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A step-by-step guide to setting up a Vue.js app and integrating it with Microsoft Power Pages using Vite’s dev server and HTTPS.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 Jan-Åge Johnsen. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <script data-goatcounter="https://jjohnsen-github-io.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

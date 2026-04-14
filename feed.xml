@@ -1,4 +1,178 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-03-31T20:53:55+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A</title><link href="/2026/esphome-altherma-monitor-daikin-heat-pump/" rel="alternate" type="text/html" title="ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A" /><published>2026-01-05T00:00:00+01:00</published><updated>2026-01-05T00:00:00+01:00</updated><id>/2026/esphome-altherma-monitor-daikin-heat-pump</id><content type="html" xml:base="/2026/esphome-altherma-monitor-daikin-heat-pump/"><![CDATA[<p>I’ve been running a custom ESPHome implementation for my Daikin Altherma heat pump since 2022, and I finally got around to doing a proper rewrite. The result is <a href="https://github.com/jjohnsen/esphome-altherma">ESPHome Altherma</a> - a native ESPHome custom component that monitors your Daikin Altherma 3 heat pump via the X10A connector and integrates directly with Home Assistant.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-04-14T11:56:50+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.github.io</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Proxmox Network Isolation - Isolate LXC Container from Local Network</title><link href="/2026/proxmox-network-isolation/" rel="alternate" type="text/html" title="Proxmox Network Isolation - Isolate LXC Container from Local Network" /><published>2026-04-14T00:00:00+02:00</published><updated>2026-04-14T00:00:00+02:00</updated><id>/2026/proxmox-network-isolation</id><content type="html" xml:base="/2026/proxmox-network-isolation/"><![CDATA[<p>When you run a service like WordPress in your homelab and expose it to the internet (via Cloudflare Tunnel, reverse proxy, etc.), you’re creating an entry point that the outside world can reach. By default, this container sits on your home network alongside other devices, and if it’s compromised, an attacker could pivot to attack your NAS, Proxmox host, or other devices on the LAN.</p>
+
+<p>The practical question is: does your WordPress container actually <em>need</em> access to your internal network? The answer is almost always no. WordPress needs internet access to fetch updates, plugins, and reach Cloudflare. But it has no legitimate reason to reach other devices on your LAN.</p>
+
+<p>Network isolation enforces this principle: the container gets full internet access via NAT, but is explicitly denied access to your local network. If WordPress is compromised by a vulnerability or malicious plugin, an attacker cannot pivot internally to attack your infrastructure. 🛡️</p>
+
+<h2 id="why-network-isolation">Why Network Isolation?</h2>
+
+<ul>
+  <li><strong>Security by default</strong> — limit the blast radius if a container is compromised</li>
+  <li><strong>Network segmentation</strong> — different containers have different trust levels and access requirements</li>
+  <li><strong>Compliance-like boundaries</strong> — enforce what each service should reach</li>
+  <li><strong>Simplified troubleshooting</strong> — catch unintended network access patterns</li>
+</ul>
+
+<h2 id="what-youll-achieve">What You’ll Achieve</h2>
+
+<ul>
+  <li>✅ Container gets internet access via NAT</li>
+  <li>✅ Container cannot reach your local LAN</li>
+  <li>✅ DNS works via public resolvers or Tailscale</li>
+  <li>✅ WordPress hosted on the container is accessible through Cloudflare Tunnel</li>
+</ul>
+
+<h2 id="step-by-step-setup">Step-by-Step Setup</h2>
+
+<h3 id="step-1-create-an-isolated-bridge-on-proxmox">Step 1: Create an Isolated Bridge on Proxmox</h3>
+
+<p>SSH into your Proxmox host and edit the network config:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano /etc/network/interfaces
+</code></pre></div></div>
+
+<p>Add a new bridge with no physical uplink (this is the isolation magic):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>auto vmbr1
+iface vmbr1 inet static
+        address 10.10.10.1/24
+        bridge-ports none
+        bridge-stp off
+        bridge-fd 0
+        post-up iptables -t nat -A POSTROUTING -s '10.10.10.0/24' -o vmbr0 -j MASQUERADE
+        post-up iptables -I FORWARD 1 -i vmbr1 -d 192.168.1.0/24 -j REJECT
+        post-down iptables -t nat -D POSTROUTING -s '10.10.10.0/24' -o vmbr0 -j MASQUERADE
+        post-down iptables -D FORWARD -i vmbr1 -d 192.168.1.0/24 -j REJECT        
+</code></pre></div></div>
+
+<p>What each line does:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Line</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">address 10.10.10.1/24</code></td>
+      <td>Gateway IP for the isolated subnet</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bridge-ports none</code></td>
+      <td>No physical NIC attached — this prevents LAN traffic</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">post-up iptables -t nat...MASQUERADE</code></td>
+      <td>Enable NAT so container traffic leaves the Proxmox host</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">post-up iptables -I FORWARD...-d 192.168.1.0/24</code></td>
+      <td>Block forwarding to your LAN</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">post-down iptables -t nat...-D</code></td>
+      <td>Clean up the NAT rule when bridge stops</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">post-down iptables -D FORWARD</code></td>
+      <td>Clean up the block rule</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Enable IPv4 forwarding (required for NAT):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"net.ipv4.ip_forward=1"</span> <span class="o">&gt;&gt;</span> /etc/sysctl.conf
+sysctl <span class="nt">-p</span> <span class="c"># Apply immediately</span>
+</code></pre></div></div>
+
+<h3 id="step-2-restart-networking">Step 2: Restart Networking</h3>
+
+<p>Bring up the new bridge:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ifdown vmbr1 <span class="o">&amp;&amp;</span> ifup vmbr1
+</code></pre></div></div>
+
+<p>Verify it exists:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip addr show vmbr1
+brctl show vmbr1
+</code></pre></div></div>
+
+<p>Verify the NAT and FORWARD rules were added:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>iptables <span class="nt">-t</span> nat <span class="nt">-L</span> POSTROUTING <span class="nt">-n</span> <span class="nt">-v</span>
+iptables <span class="nt">-L</span> FORWARD <span class="nt">-n</span> <span class="nt">-v</span>
+</code></pre></div></div>
+
+<h3 id="step-3-attach-container-to-the-isolated-bridge">Step 3: Attach Container to the Isolated Bridge</h3>
+
+<p>In the Proxmox web UI:</p>
+
+<ol>
+  <li>Open your container</li>
+  <li>Go to <strong>Network</strong></li>
+  <li>Open the <strong>Network Device</strong></li>
+  <li>Change <strong>Bridge</strong> from <code class="language-plaintext highlighter-rouge">vmbr0</code> to <code class="language-plaintext highlighter-rouge">vmbr1</code></li>
+  <li>Set the IP Configuration to Static and use an IP in the subnet</li>
+  <li>Go to <strong>DNS</strong></li>
+  <li>Set the DNS Servers to <code class="language-plaintext highlighter-rouge">1.1.1.1 1.0.0.1</code> (Cloudflare DNS) or your preferred public DNS</li>
+  <li>Reboot the container to apply all changes</li>
+</ol>
+
+<p><img src="proxmox-lxc-network-device-vmbr1-static-ip.png" alt="Proxmox LXC network device settings using vmbr1 with static IP 10.10.10.2 and gateway 10.10.10.1" />
+<img src="proxmox-lxc-dns-servers-cloudflare.png" alt="Proxmox LXC DNS settings configured with Cloudflare DNS servers 1.1.1.1 and 1.0.0.1" /></p>
+
+<h2 id="verification">Verification</h2>
+
+<p>Inside the container, run these tests:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Test 1: Can reach the gateway (required for any external traffic)</span>
+ping <span class="nt">-c</span> 3 10.10.10.1
+
+<span class="c"># Test 2: Can reach the internet (NAT working)</span>
+ping <span class="nt">-c</span> 3 1.1.1.1
+
+<span class="c"># Test 3: Cannot reach local network (isolation working)</span>
+<span class="c"># Use an actual IP from your LAN, e.g., your NAS or router</span>
+ping <span class="nt">-c</span> 3 192.168.1.15
+
+<span class="c"># Test 4: DNS works</span>
+nslookup vg.no
+</code></pre></div></div>
+
+<p>Expected results:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✅ ping 10.10.10.1 — success (2 packets → 2 received)
+✅ ping 1.1.1.1 — success (3 packets → 3 received)
+❌ ping 192.168.1.15 — fails (Destination Host Unreachable or Port Unreachable)
+✅ nslookup vg.no — resolves and returns an IP
+</code></pre></div></div>
+
+<h2 id="debugging-network-issues">Debugging Network Issues</h2>
+
+<p>If internet fails, verify on the Proxmox host:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Check IP forwarding is enabled</span>
+sysctl net.ipv4.ip_forward
+
+<span class="c"># Check NAT rule exists</span>
+iptables <span class="nt">-t</span> nat <span class="nt">-L</span> POSTROUTING <span class="nt">-n</span> <span class="nt">-v</span>
+
+<span class="c"># Check bridge membership</span>
+brctl show vmbr1
+
+<span class="c"># Test connectivity from host</span>
+ping <span class="nt">-c</span> 1 10.10.10.2
+</code></pre></div></div>
+
+<h2 id="ending">Ending</h2>
+
+<p>This setup gives you a practical security boundary for internet-facing homelab services: keep outbound internet access for updates and integrations, while blocking lateral movement into your LAN.</p>
+
+<p>For me, this is now a baseline pattern in Proxmox: if a service is exposed publicly, it should live on an isolated bridge with explicit egress rules instead of full LAN trust.</p>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="Proxmox" /><category term="Homelab" /><category term="Network" /><category term="LXC" /><category term="Security" /><summary type="html"><![CDATA[Set up a Proxmox LXC container with isolated network access - allow outbound internet traffic while blocking access to the local network.]]></summary></entry><entry><title type="html">ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A</title><link href="/2026/esphome-altherma-monitor-daikin-heat-pump/" rel="alternate" type="text/html" title="ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A" /><published>2026-01-05T00:00:00+01:00</published><updated>2026-01-05T00:00:00+01:00</updated><id>/2026/esphome-altherma-monitor-daikin-heat-pump</id><content type="html" xml:base="/2026/esphome-altherma-monitor-daikin-heat-pump/"><![CDATA[<p>I’ve been running a custom ESPHome implementation for my Daikin Altherma heat pump since 2022, and I finally got around to doing a proper rewrite. The result is <a href="https://github.com/jjohnsen/esphome-altherma">ESPHome Altherma</a> - a native ESPHome custom component that monitors your Daikin Altherma 3 heat pump via the X10A connector and integrates directly with Home Assistant.</p>
 
 <p>Inspired by <a href="https://github.com/raomin/ESPAltherma">ESPAltherma</a>, but built as a proper ESPHome component - so you get OTA updates, auto-discovery, and all the other ESPHome goodness out of the box.</p>
 

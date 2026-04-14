@@ -46,4 +46,10 @@ var store = [{
         "tags": ["ESPHome","Home Assistant","Daikin","Heat Pump","ESP32","IoT"],
         "url": "/2026/esphome-altherma-monitor-daikin-heat-pump/",
         "teaser": null
+      },{
+        "title": "Proxmox Network Isolation - Isolate LXC Container from Local Network",
+        "excerpt":"When you run a service like WordPress in your homelab and expose it to the internet (via Cloudflare Tunnel, reverse proxy, etc.), you’re creating an entry point that the outside world can reach. By default, this container sits on your home network alongside other devices, and if it’s compromised, an...","categories": [],
+        "tags": ["Proxmox","Homelab","Network","LXC","Security"],
+        "url": "/2026/proxmox-network-isolation/",
+        "teaser": null
       }]
