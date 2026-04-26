@@ -1,0 +1,1066 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.0 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="nb-NO" class="no-js">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>ESPHome Altherma + Emoncms Setup Guide - jjohnsen.no</title>
+<meta name="description" content="Set up ESPHome Altherma with Emoncms for long-term heat pump performance monitoring and energy dashboards in Home Assistant.">
+
+
+  <meta name="author" content="Jan-Åge Johnsen">
+  
+  <meta property="article:author" content="Jan-Åge Johnsen">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="nb_NO">
+<meta property="og:site_name" content="jjohnsen.no">
+<meta property="og:title" content="ESPHome Altherma + Emoncms Setup Guide">
+<meta property="og:url" content="/2026/esphome-altherma-emoncms-setup-guide/">
+
+
+  <meta property="og:description" content="Set up ESPHome Altherma with Emoncms for long-term heat pump performance monitoring and energy dashboards in Home Assistant.">
+
+
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-04-26T00:00:00+02:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="/2026/esphome-altherma-emoncms-setup-guide/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="jjohnsen.no Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/">
+          jjohnsen.no
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="https://esphome-altherma.jjohnsen.no"
+                
+                
+              >ESPHome Altherma</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="/">
+        <img src="/assets/images/profile-pic.jfif" alt="Jan-Åge Johnsen" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="/" itemprop="url">Jan-Åge Johnsen</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>lives and works in Norway, doing Azure, Power Platform and sometimes smart house things.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+            <li><a href="https://github.com/jjohnsen" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/janagejohnsen/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:jan.age.johnsen@gmail.com" rel="me" class="u-email">
+            <meta itemprop="email" content="jan.age.johnsen@gmail.com" />
+            <i class="fas fa-fw fa-square-envelope" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="ESPHome Altherma + Emoncms Setup Guide">
+    <meta itemprop="description" content="Set up ESPHome Altherma with Emoncms for long-term heat pump performance monitoring and energy dashboards in Home Assistant.">
+    <meta itemprop="datePublished" content="2026-04-26T00:00:00+02:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="/2026/esphome-altherma-emoncms-setup-guide/" itemprop="url">ESPHome Altherma + Emoncms Setup Guide
+</a>
+          </h1>
+          
+
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2026-04-26T00:00:00+02:00">April 26, 2026</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc" aria-label="Table of contents">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#why-use-emoncms-with-your-heat-pump">Why use Emoncms with your heat pump?</a></li><li><a href="#install-emoncms-as-a-home-assistant-add-on">Install Emoncms as a Home Assistant Add-on</a><ul><li><a href="#get-your-emoncms-api-key">Get Your Emoncms API Key</a></li></ul></li><li><a href="#configuration-in-home-assistant">Configuration in Home Assistant</a><ul><li><a href="#configure-the-rest_command">Configure the rest_command</a></li><li><a href="#test-the-rest_command">Test the rest_command</a></li><li><a href="#install-the-emonncms_heatpump_sender-blueprint">Install the emonncms_heatpump_sender Blueprint</a><ul><li><a href="#blueprint-inputs">Blueprint inputs</a></li></ul></li></ul></li><li><a href="#configure-emoncms">Configure Emoncms</a><ul><li><a href="#emoncms-inputs">Emoncms Inputs</a><ul><li><a href="#heatpump_elec">heatpump_elec</a></li><li><a href="#heatpump_heat">heatpump_heat</a><ul><li><a href="#step-1-create-heatpump_deltat">Step 1: Create heatpump_deltaT</a></li><li><a href="#step-2-create-heatpump_heat">Step 2: Create heatpump_heat</a></li></ul></li><li><a href="#remaining-inputs">Remaining inputs</a></li><li><a href="#verify-inputs">Verify Inputs</a></li></ul></li><li><a href="#configure-feeds">Configure Feeds</a><ul><li><a href="#verify">Verify</a></li></ul></li></ul></li><li><a href="#configure-the-my-heatpump-app">Configure the My Heatpump app</a><ul><li><a href="#setup">Setup</a></li><li><a href="#tips">Tips</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <p>This guide walks you through connecting ESPHome Altherma to Emoncms in Home Assistant for long-term heat pump monitoring.
+Both local and remote setups are covered — starting with local.</p>
+
+<p><img src="myheatpump-dashboard-overview.png" alt="ESPHome Altherma + Emoncms setup diagram" /></p>
+
+<h2 id="why-use-emoncms-with-your-heat-pump">Why use Emoncms with your heat pump?</h2>
+
+<p>Home Assistant is excellent for real-time monitoring and control, but it wasn’t built for analyzing long-term heat pump data. Emoncms fills that gap.</p>
+
+<p><strong>What you gain:</strong></p>
+
+<ul>
+  <li><strong>Energy dashboards</strong> the built-in <a href="https://community.openenergymonitor.org/t/my-heatpump-app-recent-updates-and-tips/24806">MyHeatpump app</a> gives you a dedicated heat pump performance dashboard with COP, heat output, electric consumption, and temperatures over time.</li>
+  <li><strong>Long-term data</strong> feeds are stored efficiently and queryable over months and years, well beyond how most Home Assistant instances are configured.</li>
+  <li><strong>Calculated feeds</strong> Emoncms can derive values like heat output in watts and cumulative kWh directly from raw sensor data, without extra automations in Home Assistant.</li>
+  <li><strong>Open standard</strong> your data stays on your own hardware (local install) or your own Emoncms account (remote), with no vendor lock-in.</li>
+  <li><strong>Performance monitoring</strong> tracking COP (Coefficient of Performance = heat out ÷ electricity in) over time lets you spot degradation, validate refrigerant charge, and compare heating seasons.</li>
+</ul>
+
+<p><strong>Typical use case:</strong>
+You have a Daikin Altherma with ESPHome Altherma reading sensors over UART, and you want to know: is my heat pump actually running efficiently? How much heat did it produce last month compared to how much electricity it used? Emoncms answers those questions out of the box.</p>
+
+<hr />
+
+<h2 id="install-emoncms-as-a-home-assistant-add-on">Install Emoncms as a Home Assistant Add-on</h2>
+
+<p><em>This is only required for running Emoncms locally.</em></p>
+
+<p>Go to <strong>Settings → Add-ons → Add-on Store</strong>.</p>
+
+<p>Add the Emoncms repository by clicking the three-dot menu (<strong>…</strong>) in the upper right corner and selecting <strong>Repositories</strong>.</p>
+
+<p>Add: <code class="language-plaintext highlighter-rouge">https://github.com/Open-Building-Management/emoncms</code></p>
+
+<p>Then use the <strong>…</strong> menu again and select <strong>Check for updates</strong>.<br />
+Search for <code class="language-plaintext highlighter-rouge">emoncms</code> and install it.</p>
+
+<p><img src="emoncms-addon-store.png" alt="Emoncms add-on in the store" /></p>
+
+<p>From the add-on info screen, open the <strong>Web UI</strong>. You may also want to enable <strong>Show in sidebar</strong>.</p>
+
+<p><img src="emoncms-addon-web-ui.png" alt="Emoncms add-on info screen" /></p>
+
+<hr />
+
+<h3 id="get-your-emoncms-api-key">Get Your Emoncms API Key</h3>
+
+<p>In Emoncms, go to <strong>My Account</strong> and copy the <strong>Read &amp; Write API Key</strong> — you will need it in the next step.</p>
+
+<p><img src="emoncms-api-key-location.png" alt="Emoncms API key location" /></p>
+
+<hr />
+
+<h2 id="configuration-in-home-assistant">Configuration in Home Assistant</h2>
+
+<h3 id="configure-the-rest_command">Configure the <code class="language-plaintext highlighter-rouge">rest_command</code></h3>
+<p>This sends sensor data from Home Assistant to Emoncms.</p>
+
+<p>Add the following to <code class="language-plaintext highlighter-rouge">/homeassistant/configuration.yaml</code> (you can use the <strong>File Editor</strong> add-on):</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">rest_command</span><span class="pi">:</span>
+  <span class="na">emoncms_post</span><span class="pi">:</span>
+    <span class="na">url</span><span class="pi">:</span> <span class="s2">"</span><span class="s">https://YOU_HOME_ASSISTANT_IP:7443/input/post.json?apikey=YOUR_KEY&amp;node="</span>
+    <span class="na">method</span><span class="pi">:</span> <span class="s">POST</span>
+    <span class="na">verify_ssl</span><span class="pi">:</span> <span class="no">false</span>
+    <span class="na">payload</span><span class="pi">:</span> <span class="s2">"</span><span class="s">json="</span>
+    <span class="na">headers</span><span class="pi">:</span>
+      <span class="na">Content-Type</span><span class="pi">:</span> <span class="s">application/x-www-form-urlencoded</span>
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">YOUR_HOME_ASSISTANT_IP</code> and <code class="language-plaintext highlighter-rouge">YOUR_KEY</code> with your actual values.</p>
+
+<p>After saving, do a <strong>Quick Reload</strong> or <strong>Restart</strong> Home Assistant for the change to take effect.</p>
+
+<h3 id="test-the-rest_command">Test the rest_command</h3>
+
+<p>Go to <strong>Settings → Developer Tools → Actions</strong>, select <code class="language-plaintext highlighter-rouge">rest_command.emoncms_post</code>, and test with:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">action</span><span class="pi">:</span> <span class="s">rest_command.emoncms_post</span>
+<span class="na">data</span><span class="pi">:</span>
+  <span class="na">node</span><span class="pi">:</span> <span class="s">test</span>
+  <span class="na">payload</span><span class="pi">:</span> <span class="s1">'</span><span class="s">{"test":1}'</span>
+</code></pre></div></div>
+
+<p><img src="home-assistant-rest-command-test.png" alt="Testing the rest_command" /></p>
+
+<p>A successful response returns <code class="language-plaintext highlighter-rouge">ok</code>. You can confirm by opening Emoncms — the test data should appear under <strong>Inputs</strong>.</p>
+
+<p><img src="emoncms-inputs-test-data.png" alt="Test data visible in Emoncms inputs" /></p>
+
+<hr />
+
+<h3 id="install-the-emonncms_heatpump_sender-blueprint">Install the <code class="language-plaintext highlighter-rouge">emonncms_heatpump_sender</code> Blueprint</h3>
+
+<p>The blueprint creates a Home Assistant automation that collects heat pump sensor readings on a fixed schedule and posts them to Emoncms via the <code class="language-plaintext highlighter-rouge">rest_command</code> configured earlier. It runs every 30 seconds by default and skips any sensors that report <code class="language-plaintext highlighter-rouge">unknown</code> or <code class="language-plaintext highlighter-rouge">unavailable</code>, so a missing sensor won’t break the whole payload.</p>
+
+<p>Two values are <strong>calculated</strong> inside the automation rather than read directly from a sensor:</p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">heatpump_elec</code></strong> — electric use in watts, computed as <code class="language-plaintext highlighter-rouge">INV primary current (A) × Voltage (N-phase) (V)</code>.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">immersion_elec</code></strong> — backup heater power in watts, summed from the BUH Step 1 and Step 2 binary sensors and their configured power values.</li>
+</ul>
+
+<p>Go to <strong>Settings → Automations &amp; Scenes → Blueprints → Import Blueprint</strong> and use this URL:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://raw.githubusercontent.com/jjohnsen/esphome-altherma/refs/heads/main/homeassistant/blueprints/emonncms_heatpump_sender.yaml
+</code></pre></div></div>
+
+<p>After import click on the tree dots and select <code class="language-plaintext highlighter-rouge">+Create Automation</code>:<br />
+<img src="image.png" alt="alt text" /></p>
+
+<h4 id="blueprint-inputs">Blueprint inputs</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Typical ESPHome Altherma entity</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Emoncms node</strong></td>
+      <td>—</td>
+      <td>Name used in Emoncms. Default: <code class="language-plaintext highlighter-rouge">ESPHome_Altherma</code></td>
+    </tr>
+    <tr>
+      <td><strong>Interval in seconds</strong></td>
+      <td>—</td>
+      <td>Default <code class="language-plaintext highlighter-rouge">/30</code> (every 30 s). Must match the feed interval in Emoncms</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_primary_current</strong></td>
+      <td>INV primary current (A)</td>
+      <td>Combined with voltage to calculate <code class="language-plaintext highlighter-rouge">heatpump_elec</code></td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_voltage</strong></td>
+      <td>Voltage (N-phase) (V)</td>
+      <td>Combined with current to calculate <code class="language-plaintext highlighter-rouge">heatpump_elec</code></td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_flowT</strong></td>
+      <td>Leaving water temp. after BUH (R2T)</td>
+      <td>Used to derive <code class="language-plaintext highlighter-rouge">heatpump_deltaT</code> and heat output</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_returnT</strong></td>
+      <td>Inlet water temp. (R4T)</td>
+      <td>Used to derive <code class="language-plaintext highlighter-rouge">heatpump_deltaT</code></td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_outsideT</strong></td>
+      <td>Outdoor air temp. (R1T)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_roomT</strong></td>
+      <td>Room temperature</td>
+      <td>Typically a separate sensor inside your home</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_targetT</strong></td>
+      <td>LW setpoint (main)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_flowrate</strong></td>
+      <td>Flow sensor (l/min)</td>
+      <td>Used to calculate heat output in Emoncms</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_dhw</strong></td>
+      <td>3-way valve (On:DHW / Off:Space)</td>
+      <td>Binary sensor — sent as <code class="language-plaintext highlighter-rouge">1</code> (DHW) or <code class="language-plaintext highlighter-rouge">0</code> (space heating)</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_dhwT</strong></td>
+      <td>DHW tank temp. (R5T)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_dhwTargetT</strong></td>
+      <td>DHW setpoint</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>BUH Step 1</strong></td>
+      <td>BUH Step1</td>
+      <td>Binary sensor for backup heater stage 1</td>
+    </tr>
+    <tr>
+      <td><strong>BUH Step 1 power</strong></td>
+      <td>—</td>
+      <td>Watts to add when Step 1 is on. Default: 2000 W</td>
+    </tr>
+    <tr>
+      <td><strong>BUH Step 2</strong></td>
+      <td>BUH Step2</td>
+      <td>Binary sensor for backup heater stage 2</td>
+    </tr>
+    <tr>
+      <td><strong>BUH Step 2 power</strong></td>
+      <td>—</td>
+      <td>Watts to add when Step 2 is on. Default: 4000 W</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>The <strong>Interval in seconds</strong> here should match the interval you set on each Emoncms feed.</p>
+</blockquote>
+
+<p>Configure all the blueprint inputs. ESPHome Altherma should already be running and will populate most of the sensor fields.</p>
+
+<p><img src="home-assistant-blueprint-input-configuration.png" alt="Blueprint input configuration" /></p>
+
+<hr />
+
+<h2 id="configure-emoncms">Configure Emoncms</h2>
+
+<h3 id="emoncms-inputs">Emoncms Inputs</h3>
+
+<h4 id="heatpump_elec">heatpump_elec</h4>
+
+<p>This input must produce both <strong>electric use in watts</strong> and <strong>cumulative electric use in kWh</strong>.<br />
+Click the wrench icon and under <strong>Process</strong>, ensure <code class="language-plaintext highlighter-rouge">Log to feed</code> is selected.</p>
+
+<p><img src="emoncms-input-heatpump-elec.png" alt="heatpump_elec input" /></p>
+
+<p>Set the interval to match the <strong>Interval in seconds</strong> configured in the <code class="language-plaintext highlighter-rouge">Emoncms heat pump sender</code> automation (default: 30 s).<br />
+Click <strong>Add</strong>:<br />
+<img src="emoncms-process-log-to-feed.png" alt="Log to feed process setup" /></p>
+
+<p>To add the cumulative feed, select <strong>Power to kWh</strong>, set the process name to <code class="language-plaintext highlighter-rouge">heatpump_elec_kwh</code>, set the correct interval, and click <strong>Add</strong>.</p>
+
+<p>Your <code class="language-plaintext highlighter-rouge">heatpump_elec</code> process list should now look like this:<br />
+<img src="emoncms-heatpump-elec-process-list.png" alt="Completed heatpump_elec process list" /></p>
+
+<hr />
+
+<h4 id="heatpump_heat">heatpump_heat</h4>
+
+<p>Heat output in watts is calculated from flow rate and temperature difference using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Heat (W) = flowrate (l/min) × ΔT (°C) × 69.78
+</code></pre></div></div>
+<blockquote>
+  <p><strong>Where:</strong> 69.78 = specific heat of water (4.187 J/g·°C) × 1000 g/L ÷ 60 s/min</p>
+</blockquote>
+
+<h5 id="step-1-create-heatpump_deltat">Step 1: Create heatpump_deltaT</h5>
+
+<p><code class="language-plaintext highlighter-rouge">heatpump_deltaT</code> = flow temperature − return temperature.<br />
+It does not exist as a direct sensor, so we derive it inside Emoncms.</p>
+
+<p>Open the <code class="language-plaintext highlighter-rouge">heatpump_flowT</code> input and configure the following process steps:</p>
+
+<ol>
+  <li><strong>Log to feed</strong> use the default name, set the correct interval, click <strong>Add</strong>.</li>
+  <li><strong>- input</strong> select <code class="language-plaintext highlighter-rouge">heatpump_returnT</code> as the input, click <strong>Add</strong>.</li>
+  <li>Click the <strong>log</strong> button next to Add process, change the name to <code class="language-plaintext highlighter-rouge">heatpump_deltaT</code>, set the correct interval, and click <strong>Add</strong>.</li>
+</ol>
+
+<p>Click <strong>Changed, press to save</strong>, then <strong>Close</strong>.</p>
+
+<p>The process list should look like this:<br />
+<img src="emoncms-heatpump-deltat-process-list.png" alt="heatpump_deltaT process list" /></p>
+
+<h5 id="step-2-create-heatpump_heat">Step 2: Create heatpump_heat</h5>
+
+<p>Open the <code class="language-plaintext highlighter-rouge">heatpump_flowrate</code> input and configure the following process steps:</p>
+
+<ol>
+  <li><strong>Log to feed</strong> set the correct interval and click <strong>Add</strong> (this logs the raw flow rate).</li>
+  <li><strong>× feed</strong> select <code class="language-plaintext highlighter-rouge">heatpump_deltaT</code>, click <strong>Add</strong>.</li>
+  <li><strong>Calibration: ×</strong> enter <code class="language-plaintext highlighter-rouge">69.78</code>, click <strong>Add</strong>.</li>
+  <li>Click <strong>log</strong> next to Add process, set name to <code class="language-plaintext highlighter-rouge">heatpump_heat</code>, set the correct interval, click <strong>Add</strong> (this is the heat output feed in watts).</li>
+  <li>Click <strong>kWh</strong> next to Add process, set name to <code class="language-plaintext highlighter-rouge">heatpump_heat_kwh</code>, set the correct interval, click <strong>Add</strong> (this is the cumulative heat feed).</li>
+</ol>
+
+<p>Click <strong>Changed, press to save</strong>, then <strong>Close</strong>.</p>
+
+<p>The process list should look like this:<br />
+<img src="emoncms-heatpump-heat-process-list.png" alt="heatpump_heat process list" /></p>
+
+<hr />
+
+<h4 id="remaining-inputs">Remaining inputs</h4>
+
+<p>The remaining inputs all follow the same pattern:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_returnT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_outsideT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_roomT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_targetT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_dhw</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_dhwT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">immersion_elec</code></li>
+</ul>
+
+<p>For each: click the wrench, select <strong>Log to feed</strong>, set the correct interval, and click <strong>Add</strong>.</p>
+
+<p><img src="emoncms-simple-log-to-feed-process.png" alt="Simple Log to feed process setup" /></p>
+
+<hr />
+
+<h4 id="verify-inputs">Verify Inputs</h4>
+
+<p>The complete input list should look like this:<br />
+<img src="emoncms-complete-input-list.png" alt="Complete Emoncms input list" /></p>
+
+<h3 id="configure-feeds">Configure Feeds</h3>
+
+<p>Set the correct units for each feed:<br />
+<img src="emoncms-feed-unit-configuration.png" alt="Feed unit configuration" /></p>
+
+<h4 id="verify">Verify</h4>
+
+<p>The complete feed list should now look like this:<br />
+<img src="emoncms-feed-units-correct.png" alt="Correct feed units" /></p>
+
+<h2 id="configure-the-my-heatpump-app">Configure the <em>My Heatpump</em> app</h2>
+
+<p>The <a href="https://github.com/emoncms/app/tree/master/apps/OpenEnergyMonitor/myheatpump">My Heatpump app</a> is an Emoncms built-in app purpose-built for heat pump performance monitoring.</p>
+
+<h3 id="setup">Setup</h3>
+
+<p>From <code class="language-plaintext highlighter-rouge">Apps -&gt; +New</code> select My Heatpump.</p>
+
+<p><img src="emoncms-myheatpump-app-selection.png" alt="My Heatpump app selection" /></p>
+
+<p>Map the app inputs to the feeds we just created:</p>
+
+<p><img src="myheatpump-app-feed-mapping.png" alt="My Heatpump app feed mapping" /></p>
+
+<p>Check <strong>Enable daily pre-processor</strong> to split the daily view into space heating and domestic hot water, giving you separate COP and energy figures for each mode.</p>
+
+<p>Click <strong>Launch App</strong> and enjoy ;)</p>
+
+<p><img src="home-assistant-emoncms-myheatpump-dashboard.png" alt="My Heatpump dashboard in Home Assistant" /></p>
+
+<h3 id="tips">Tips</h3>
+
+<ul>
+  <li>Click on a bar in the daily chart to jump to the power chart for that day.</li>
+  <li>Click <strong>COP</strong> in the stats panel to toggle between <em>COP 30 min</em> (smoothed average) and <em>COP Now</em> (instantaneous).</li>
+  <li>For deeper analysis, the app also tracks data quality percentages for each feed, so you can see if gaps in data are affecting your COP figures.</li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+    
+
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#altherma" class="page__taxonomy-item p-category" rel="tag">Altherma</a><span class="sep">, </span>
+    
+      <a href="/tags/#emoncms" class="page__taxonomy-item p-category" rel="tag">Emoncms</a><span class="sep">, </span>
+    
+      <a href="/tags/#energy-monitoring" class="page__taxonomy-item p-category" rel="tag">Energy Monitoring</a><span class="sep">, </span>
+    
+      <a href="/tags/#esphome" class="page__taxonomy-item p-category" rel="tag">ESPHome</a><span class="sep">, </span>
+    
+      <a href="/tags/#home-assistant" class="page__taxonomy-item p-category" rel="tag">Home Assistant</a>
+    
+    </span>
+  </p>
+
+
+  
+
+  
+
+
+        
+
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2026-04-26T00:00:00+02:00">April 26, 2026</time></p>
+
+
+      </footer>
+
+      
+
+      
+
+  <nav class="pagination" aria-label="Post pagination">
+    
+      <a href="/2026/proxmox-network-isolation/" class="pagination--pager" title="Proxmox Network Isolation - Isolate LXC Container from Local Network">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/2026/proxmox-network-isolation/" rel="permalink">Proxmox Network Isolation - Isolate LXC Container from Local Network
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2026-04-14T00:00:00+02:00">April 14, 2026</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">Set up a Proxmox LXC container with isolated network access - allow outbound internet traffic while blocking access to the local network.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/2026/esphome-altherma-monitor-daikin-heat-pump/" rel="permalink">ESPHome Altherma - Monitor your Daikin Altherma 3 heat pump via X10A
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2026-01-05T00:00:00+01:00">January 5, 2026</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">A native ESPHome custom component for monitoring Daikin Altherma 3 heat pumps via the X10A connector - with browser-based installation and Home Assistant aut...</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/2025/migrating-azure-devops-projects-part-2-boards-and-work-items/" rel="permalink">Migrating Azure DevOps Projects - Part 2: Boards &amp; Work Items
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-10T00:00:00+01:00">February 10, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">Migrating Azure DevOps Boards and Work Items between organizations using azure-devops-migration-tools.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" rel="permalink">Migrating Azure DevOps Projects - Part 1: Repos and Wikis
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2025-02-03T00:00:00+01:00">February 3, 2025</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        
+<div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var imgs = Array.from(document.querySelectorAll('.page__content img'));
+    if (imgs.length === 0) return;
+
+    var elements = imgs.map(function (img) {
+      return { href: img.src, description: img.alt || '' };
+    });
+
+    var lightbox = GLightbox({ elements: elements });
+
+    imgs.forEach(function (img, i) {
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        lightbox.openAt(i);
+      });
+    });
+  });
+</script>
+
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2026 <a href="">jjohnsen.no</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+  <script data-goatcounter="https://jjohnsen-github-io.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

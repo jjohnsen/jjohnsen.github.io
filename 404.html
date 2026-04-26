@@ -81,11 +81,7 @@
 
 
 
-    <!-- start custom head snippets -->
-
-<!-- insert favicons. use https://realfavicongenerator.net/ -->
-
-<!-- end custom head snippets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 
   </head>
 
@@ -176,9 +172,29 @@
 
     <div id="footer" class="page__footer">
       <footer>
-        <!-- start custom footer snippets -->
+        <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var imgs = Array.from(document.querySelectorAll('.page__content img'));
+    if (imgs.length === 0) return;
 
-<!-- end custom footer snippets -->
+    var elements = imgs.map(function (img) {
+      return { href: img.src, description: img.alt || '' };
+    });
+
+    var lightbox = GLightbox({ elements: elements });
+
+    imgs.forEach(function (img, i) {
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        lightbox.openAt(i);
+      });
+    });
+  });
+</script>
+
         
 
 

@@ -52,4 +52,10 @@ var store = [{
         "tags": ["Proxmox","Homelab","Network","LXC","Security"],
         "url": "/2026/proxmox-network-isolation/",
         "teaser": null
+      },{
+        "title": "ESPHome Altherma + Emoncms Setup Guide",
+        "excerpt":"This guide walks you through connecting ESPHome Altherma to Emoncms in Home Assistant for long-term heat pump monitoring. Both local and remote setups are covered — starting with local. Why use Emoncms with your heat pump? Home Assistant is excellent for real-time monitoring and control, but it wasn’t built for...","categories": [],
+        "tags": ["ESPHome","Altherma","Emoncms","Home Assistant","Energy Monitoring"],
+        "url": "/2026/esphome-altherma-emoncms-setup-guide/",
+        "teaser": null
       }]

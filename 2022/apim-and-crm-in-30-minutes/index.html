@@ -90,11 +90,7 @@
 
 
 
-    <!-- start custom head snippets -->
-
-<!-- insert favicons. use https://realfavicongenerator.net/ -->
-
-<!-- end custom head snippets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
 
   </head>
 
@@ -516,6 +512,56 @@ Note: the URL is case sensitive.</p>
     
     <h2 class="archive__item-title no_toc p-name" itemprop="headline">
       
+        <a class="u-url" href="/2026/esphome-altherma-emoncms-setup-guide/" rel="permalink">ESPHome Altherma + Emoncms Setup Guide
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+    
+      
+      <span class="page__meta-date">
+        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
+        
+        <time datetime="2026-04-26T00:00:00+02:00">April 26, 2026</time>
+      </span>
+    
+
+    <span class="page__meta-sep"></span>
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">Set up ESPHome Altherma with Emoncms for long-term heat pump performance monitoring and energy dashboards in Home Assistant.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
         <a class="u-url" href="/2026/proxmox-network-isolation/" rel="permalink">Proxmox Network Isolation - Isolate LXC Container from Local Network
 </a>
       
@@ -654,56 +700,6 @@ Note: the URL is case sensitive.</p>
 </div>
 
     
-      
-      
-
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
-      
-        <a class="u-url" href="/2025/migrating-azure-devops-projects-part-1-repos-and-wikis/" rel="permalink">Migrating Azure DevOps Projects - Part 1: Repos and Wikis
-</a>
-      
-    </h2>
-    
-
-
-  <p class="page__meta">
-    
-      
-      <span class="page__meta-date">
-        <i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i>
-        
-        <time datetime="2025-02-03T00:00:00+01:00">February 3, 2025</time>
-      </span>
-    
-
-    <span class="page__meta-sep"></span>
-
-    
-      
-      
-
-      <span class="page__meta-readtime">
-        <i class="far fa-fw fa-clock" aria-hidden="true"></i>
-        
-          2 minute read
-        
-      </span>
-    
-  </p>
-
-
-    <p class="archive__item-excerpt p-summary" itemprop="description">Migrating Azure DevOps projects between organizations—covering Repos and Wikis using Git mirror cloning.
-</p>
-  </article>
-</div>
-
-    
   </div>
 </div>
 
@@ -730,9 +726,29 @@ Note: the URL is case sensitive.</p>
 
     <div id="footer" class="page__footer">
       <footer>
-        <!-- start custom footer snippets -->
+        <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var imgs = Array.from(document.querySelectorAll('.page__content img'));
+    if (imgs.length === 0) return;
 
-<!-- end custom footer snippets -->
+    var elements = imgs.map(function (img) {
+      return { href: img.src, description: img.alt || '' };
+    });
+
+    var lightbox = GLightbox({ elements: elements });
+
+    imgs.forEach(function (img, i) {
+      img.style.cursor = 'pointer';
+      img.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        lightbox.openAt(i);
+      });
+    });
+  });
+</script>
+
         
 
 

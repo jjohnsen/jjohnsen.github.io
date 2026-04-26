@@ -1,4 +1,354 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-04-26T14:45:28+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.no</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">Proxmox Network Isolation - Isolate LXC Container from Local Network</title><link href="/2026/proxmox-network-isolation/" rel="alternate" type="text/html" title="Proxmox Network Isolation - Isolate LXC Container from Local Network" /><published>2026-04-14T00:00:00+02:00</published><updated>2026-04-14T00:00:00+02:00</updated><id>/2026/proxmox-network-isolation</id><content type="html" xml:base="/2026/proxmox-network-isolation/"><![CDATA[<p>When you run a service like WordPress in your homelab and expose it to the internet (via Cloudflare Tunnel, reverse proxy, etc.), you’re creating an entry point that the outside world can reach. By default, this container sits on your home network alongside other devices, and if it’s compromised, an attacker could pivot to attack your NAS, Proxmox host, or other devices on the LAN.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2026-04-26T15:30:32+02:00</updated><id>/feed.xml</id><title type="html">jjohnsen.no</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">ESPHome Altherma + Emoncms Setup Guide</title><link href="/2026/esphome-altherma-emoncms-setup-guide/" rel="alternate" type="text/html" title="ESPHome Altherma + Emoncms Setup Guide" /><published>2026-04-26T00:00:00+02:00</published><updated>2026-04-26T00:00:00+02:00</updated><id>/2026/esphome-altherma-emoncms-setup-guide</id><content type="html" xml:base="/2026/esphome-altherma-emoncms-setup-guide/"><![CDATA[<p>This guide walks you through connecting ESPHome Altherma to Emoncms in Home Assistant for long-term heat pump monitoring.
+Both local and remote setups are covered — starting with local.</p>
+
+<p><img src="myheatpump-dashboard-overview.png" alt="ESPHome Altherma + Emoncms setup diagram" /></p>
+
+<h2 id="why-use-emoncms-with-your-heat-pump">Why use Emoncms with your heat pump?</h2>
+
+<p>Home Assistant is excellent for real-time monitoring and control, but it wasn’t built for analyzing long-term heat pump data. Emoncms fills that gap.</p>
+
+<p><strong>What you gain:</strong></p>
+
+<ul>
+  <li><strong>Energy dashboards</strong> the built-in <a href="https://community.openenergymonitor.org/t/my-heatpump-app-recent-updates-and-tips/24806">MyHeatpump app</a> gives you a dedicated heat pump performance dashboard with COP, heat output, electric consumption, and temperatures over time.</li>
+  <li><strong>Long-term data</strong> feeds are stored efficiently and queryable over months and years, well beyond how most Home Assistant instances are configured.</li>
+  <li><strong>Calculated feeds</strong> Emoncms can derive values like heat output in watts and cumulative kWh directly from raw sensor data, without extra automations in Home Assistant.</li>
+  <li><strong>Open standard</strong> your data stays on your own hardware (local install) or your own Emoncms account (remote), with no vendor lock-in.</li>
+  <li><strong>Performance monitoring</strong> tracking COP (Coefficient of Performance = heat out ÷ electricity in) over time lets you spot degradation, validate refrigerant charge, and compare heating seasons.</li>
+</ul>
+
+<p><strong>Typical use case:</strong>
+You have a Daikin Altherma with ESPHome Altherma reading sensors over UART, and you want to know: is my heat pump actually running efficiently? How much heat did it produce last month compared to how much electricity it used? Emoncms answers those questions out of the box.</p>
+
+<hr />
+
+<h2 id="install-emoncms-as-a-home-assistant-add-on">Install Emoncms as a Home Assistant Add-on</h2>
+
+<p><em>This is only required for running Emoncms locally.</em></p>
+
+<p>Go to <strong>Settings → Add-ons → Add-on Store</strong>.</p>
+
+<p>Add the Emoncms repository by clicking the three-dot menu (<strong>…</strong>) in the upper right corner and selecting <strong>Repositories</strong>.</p>
+
+<p>Add: <code class="language-plaintext highlighter-rouge">https://github.com/Open-Building-Management/emoncms</code></p>
+
+<p>Then use the <strong>…</strong> menu again and select <strong>Check for updates</strong>.<br />
+Search for <code class="language-plaintext highlighter-rouge">emoncms</code> and install it.</p>
+
+<p><img src="emoncms-addon-store.png" alt="Emoncms add-on in the store" /></p>
+
+<p>From the add-on info screen, open the <strong>Web UI</strong>. You may also want to enable <strong>Show in sidebar</strong>.</p>
+
+<p><img src="emoncms-addon-web-ui.png" alt="Emoncms add-on info screen" /></p>
+
+<hr />
+
+<h3 id="get-your-emoncms-api-key">Get Your Emoncms API Key</h3>
+
+<p>In Emoncms, go to <strong>My Account</strong> and copy the <strong>Read &amp; Write API Key</strong> — you will need it in the next step.</p>
+
+<p><img src="emoncms-api-key-location.png" alt="Emoncms API key location" /></p>
+
+<hr />
+
+<h2 id="configuration-in-home-assistant">Configuration in Home Assistant</h2>
+
+<h3 id="configure-the-rest_command">Configure the <code class="language-plaintext highlighter-rouge">rest_command</code></h3>
+<p>This sends sensor data from Home Assistant to Emoncms.</p>
+
+<p>Add the following to <code class="language-plaintext highlighter-rouge">/homeassistant/configuration.yaml</code> (you can use the <strong>File Editor</strong> add-on):</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">rest_command</span><span class="pi">:</span>
+  <span class="na">emoncms_post</span><span class="pi">:</span>
+    <span class="na">url</span><span class="pi">:</span> <span class="s2">"</span><span class="s">https://YOU_HOME_ASSISTANT_IP:7443/input/post.json?apikey=YOUR_KEY&amp;node="</span>
+    <span class="na">method</span><span class="pi">:</span> <span class="s">POST</span>
+    <span class="na">verify_ssl</span><span class="pi">:</span> <span class="no">false</span>
+    <span class="na">payload</span><span class="pi">:</span> <span class="s2">"</span><span class="s">json="</span>
+    <span class="na">headers</span><span class="pi">:</span>
+      <span class="na">Content-Type</span><span class="pi">:</span> <span class="s">application/x-www-form-urlencoded</span>
+</code></pre></div></div>
+
+<p>Replace <code class="language-plaintext highlighter-rouge">YOUR_HOME_ASSISTANT_IP</code> and <code class="language-plaintext highlighter-rouge">YOUR_KEY</code> with your actual values.</p>
+
+<p>After saving, do a <strong>Quick Reload</strong> or <strong>Restart</strong> Home Assistant for the change to take effect.</p>
+
+<h3 id="test-the-rest_command">Test the rest_command</h3>
+
+<p>Go to <strong>Settings → Developer Tools → Actions</strong>, select <code class="language-plaintext highlighter-rouge">rest_command.emoncms_post</code>, and test with:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">action</span><span class="pi">:</span> <span class="s">rest_command.emoncms_post</span>
+<span class="na">data</span><span class="pi">:</span>
+  <span class="na">node</span><span class="pi">:</span> <span class="s">test</span>
+  <span class="na">payload</span><span class="pi">:</span> <span class="s1">'</span><span class="s">{"test":1}'</span>
+</code></pre></div></div>
+
+<p><img src="home-assistant-rest-command-test.png" alt="Testing the rest_command" /></p>
+
+<p>A successful response returns <code class="language-plaintext highlighter-rouge">ok</code>. You can confirm by opening Emoncms — the test data should appear under <strong>Inputs</strong>.</p>
+
+<p><img src="emoncms-inputs-test-data.png" alt="Test data visible in Emoncms inputs" /></p>
+
+<hr />
+
+<h3 id="install-the-emonncms_heatpump_sender-blueprint">Install the <code class="language-plaintext highlighter-rouge">emonncms_heatpump_sender</code> Blueprint</h3>
+
+<p>The blueprint creates a Home Assistant automation that collects heat pump sensor readings on a fixed schedule and posts them to Emoncms via the <code class="language-plaintext highlighter-rouge">rest_command</code> configured earlier. It runs every 30 seconds by default and skips any sensors that report <code class="language-plaintext highlighter-rouge">unknown</code> or <code class="language-plaintext highlighter-rouge">unavailable</code>, so a missing sensor won’t break the whole payload.</p>
+
+<p>Two values are <strong>calculated</strong> inside the automation rather than read directly from a sensor:</p>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">heatpump_elec</code></strong> — electric use in watts, computed as <code class="language-plaintext highlighter-rouge">INV primary current (A) × Voltage (N-phase) (V)</code>.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">immersion_elec</code></strong> — backup heater power in watts, summed from the BUH Step 1 and Step 2 binary sensors and their configured power values.</li>
+</ul>
+
+<p>Go to <strong>Settings → Automations &amp; Scenes → Blueprints → Import Blueprint</strong> and use this URL:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://raw.githubusercontent.com/jjohnsen/esphome-altherma/refs/heads/main/homeassistant/blueprints/emonncms_heatpump_sender.yaml
+</code></pre></div></div>
+
+<p>After import click on the tree dots and select <code class="language-plaintext highlighter-rouge">+Create Automation</code>:<br />
+<img src="image.png" alt="alt text" /></p>
+
+<h4 id="blueprint-inputs">Blueprint inputs</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Typical ESPHome Altherma entity</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Emoncms node</strong></td>
+      <td>—</td>
+      <td>Name used in Emoncms. Default: <code class="language-plaintext highlighter-rouge">ESPHome_Altherma</code></td>
+    </tr>
+    <tr>
+      <td><strong>Interval in seconds</strong></td>
+      <td>—</td>
+      <td>Default <code class="language-plaintext highlighter-rouge">/30</code> (every 30 s). Must match the feed interval in Emoncms</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_primary_current</strong></td>
+      <td>INV primary current (A)</td>
+      <td>Combined with voltage to calculate <code class="language-plaintext highlighter-rouge">heatpump_elec</code></td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_voltage</strong></td>
+      <td>Voltage (N-phase) (V)</td>
+      <td>Combined with current to calculate <code class="language-plaintext highlighter-rouge">heatpump_elec</code></td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_flowT</strong></td>
+      <td>Leaving water temp. after BUH (R2T)</td>
+      <td>Used to derive <code class="language-plaintext highlighter-rouge">heatpump_deltaT</code> and heat output</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_returnT</strong></td>
+      <td>Inlet water temp. (R4T)</td>
+      <td>Used to derive <code class="language-plaintext highlighter-rouge">heatpump_deltaT</code></td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_outsideT</strong></td>
+      <td>Outdoor air temp. (R1T)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_roomT</strong></td>
+      <td>Room temperature</td>
+      <td>Typically a separate sensor inside your home</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_targetT</strong></td>
+      <td>LW setpoint (main)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_flowrate</strong></td>
+      <td>Flow sensor (l/min)</td>
+      <td>Used to calculate heat output in Emoncms</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_dhw</strong></td>
+      <td>3-way valve (On:DHW / Off:Space)</td>
+      <td>Binary sensor — sent as <code class="language-plaintext highlighter-rouge">1</code> (DHW) or <code class="language-plaintext highlighter-rouge">0</code> (space heating)</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_dhwT</strong></td>
+      <td>DHW tank temp. (R5T)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>heatpump_dhwTargetT</strong></td>
+      <td>DHW setpoint</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>BUH Step 1</strong></td>
+      <td>BUH Step1</td>
+      <td>Binary sensor for backup heater stage 1</td>
+    </tr>
+    <tr>
+      <td><strong>BUH Step 1 power</strong></td>
+      <td>—</td>
+      <td>Watts to add when Step 1 is on. Default: 2000 W</td>
+    </tr>
+    <tr>
+      <td><strong>BUH Step 2</strong></td>
+      <td>BUH Step2</td>
+      <td>Binary sensor for backup heater stage 2</td>
+    </tr>
+    <tr>
+      <td><strong>BUH Step 2 power</strong></td>
+      <td>—</td>
+      <td>Watts to add when Step 2 is on. Default: 4000 W</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>The <strong>Interval in seconds</strong> here should match the interval you set on each Emoncms feed.</p>
+</blockquote>
+
+<p>Configure all the blueprint inputs. ESPHome Altherma should already be running and will populate most of the sensor fields.</p>
+
+<p><img src="home-assistant-blueprint-input-configuration.png" alt="Blueprint input configuration" /></p>
+
+<hr />
+
+<h2 id="configure-emoncms">Configure Emoncms</h2>
+
+<h3 id="emoncms-inputs">Emoncms Inputs</h3>
+
+<h4 id="heatpump_elec">heatpump_elec</h4>
+
+<p>This input must produce both <strong>electric use in watts</strong> and <strong>cumulative electric use in kWh</strong>.<br />
+Click the wrench icon and under <strong>Process</strong>, ensure <code class="language-plaintext highlighter-rouge">Log to feed</code> is selected.</p>
+
+<p><img src="emoncms-input-heatpump-elec.png" alt="heatpump_elec input" /></p>
+
+<p>Set the interval to match the <strong>Interval in seconds</strong> configured in the <code class="language-plaintext highlighter-rouge">Emoncms heat pump sender</code> automation (default: 30 s).<br />
+Click <strong>Add</strong>:<br />
+<img src="emoncms-process-log-to-feed.png" alt="Log to feed process setup" /></p>
+
+<p>To add the cumulative feed, select <strong>Power to kWh</strong>, set the process name to <code class="language-plaintext highlighter-rouge">heatpump_elec_kwh</code>, set the correct interval, and click <strong>Add</strong>.</p>
+
+<p>Your <code class="language-plaintext highlighter-rouge">heatpump_elec</code> process list should now look like this:<br />
+<img src="emoncms-heatpump-elec-process-list.png" alt="Completed heatpump_elec process list" /></p>
+
+<hr />
+
+<h4 id="heatpump_heat">heatpump_heat</h4>
+
+<p>Heat output in watts is calculated from flow rate and temperature difference using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Heat (W) = flowrate (l/min) × ΔT (°C) × 69.78
+</code></pre></div></div>
+<blockquote>
+  <p><strong>Where:</strong> 69.78 = specific heat of water (4.187 J/g·°C) × 1000 g/L ÷ 60 s/min</p>
+</blockquote>
+
+<h5 id="step-1-create-heatpump_deltat">Step 1: Create heatpump_deltaT</h5>
+
+<p><code class="language-plaintext highlighter-rouge">heatpump_deltaT</code> = flow temperature − return temperature.<br />
+It does not exist as a direct sensor, so we derive it inside Emoncms.</p>
+
+<p>Open the <code class="language-plaintext highlighter-rouge">heatpump_flowT</code> input and configure the following process steps:</p>
+
+<ol>
+  <li><strong>Log to feed</strong> use the default name, set the correct interval, click <strong>Add</strong>.</li>
+  <li><strong>- input</strong> select <code class="language-plaintext highlighter-rouge">heatpump_returnT</code> as the input, click <strong>Add</strong>.</li>
+  <li>Click the <strong>log</strong> button next to Add process, change the name to <code class="language-plaintext highlighter-rouge">heatpump_deltaT</code>, set the correct interval, and click <strong>Add</strong>.</li>
+</ol>
+
+<p>Click <strong>Changed, press to save</strong>, then <strong>Close</strong>.</p>
+
+<p>The process list should look like this:<br />
+<img src="emoncms-heatpump-deltat-process-list.png" alt="heatpump_deltaT process list" /></p>
+
+<h5 id="step-2-create-heatpump_heat">Step 2: Create heatpump_heat</h5>
+
+<p>Open the <code class="language-plaintext highlighter-rouge">heatpump_flowrate</code> input and configure the following process steps:</p>
+
+<ol>
+  <li><strong>Log to feed</strong> set the correct interval and click <strong>Add</strong> (this logs the raw flow rate).</li>
+  <li><strong>× feed</strong> select <code class="language-plaintext highlighter-rouge">heatpump_deltaT</code>, click <strong>Add</strong>.</li>
+  <li><strong>Calibration: ×</strong> enter <code class="language-plaintext highlighter-rouge">69.78</code>, click <strong>Add</strong>.</li>
+  <li>Click <strong>log</strong> next to Add process, set name to <code class="language-plaintext highlighter-rouge">heatpump_heat</code>, set the correct interval, click <strong>Add</strong> (this is the heat output feed in watts).</li>
+  <li>Click <strong>kWh</strong> next to Add process, set name to <code class="language-plaintext highlighter-rouge">heatpump_heat_kwh</code>, set the correct interval, click <strong>Add</strong> (this is the cumulative heat feed).</li>
+</ol>
+
+<p>Click <strong>Changed, press to save</strong>, then <strong>Close</strong>.</p>
+
+<p>The process list should look like this:<br />
+<img src="emoncms-heatpump-heat-process-list.png" alt="heatpump_heat process list" /></p>
+
+<hr />
+
+<h4 id="remaining-inputs">Remaining inputs</h4>
+
+<p>The remaining inputs all follow the same pattern:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_returnT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_outsideT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_roomT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_targetT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_dhw</code></li>
+  <li><code class="language-plaintext highlighter-rouge">heatpump_dhwT</code></li>
+  <li><code class="language-plaintext highlighter-rouge">immersion_elec</code></li>
+</ul>
+
+<p>For each: click the wrench, select <strong>Log to feed</strong>, set the correct interval, and click <strong>Add</strong>.</p>
+
+<p><img src="emoncms-simple-log-to-feed-process.png" alt="Simple Log to feed process setup" /></p>
+
+<hr />
+
+<h4 id="verify-inputs">Verify Inputs</h4>
+
+<p>The complete input list should look like this:<br />
+<img src="emoncms-complete-input-list.png" alt="Complete Emoncms input list" /></p>
+
+<h3 id="configure-feeds">Configure Feeds</h3>
+
+<p>Set the correct units for each feed:<br />
+<img src="emoncms-feed-unit-configuration.png" alt="Feed unit configuration" /></p>
+
+<h4 id="verify">Verify</h4>
+
+<p>The complete feed list should now look like this:<br />
+<img src="emoncms-feed-units-correct.png" alt="Correct feed units" /></p>
+
+<h2 id="configure-the-my-heatpump-app">Configure the <em>My Heatpump</em> app</h2>
+
+<p>The <a href="https://github.com/emoncms/app/tree/master/apps/OpenEnergyMonitor/myheatpump">My Heatpump app</a> is an Emoncms built-in app purpose-built for heat pump performance monitoring.</p>
+
+<h3 id="setup">Setup</h3>
+
+<p>From <code class="language-plaintext highlighter-rouge">Apps -&gt; +New</code> select My Heatpump.</p>
+
+<p><img src="emoncms-myheatpump-app-selection.png" alt="My Heatpump app selection" /></p>
+
+<p>Map the app inputs to the feeds we just created:</p>
+
+<p><img src="myheatpump-app-feed-mapping.png" alt="My Heatpump app feed mapping" /></p>
+
+<p>Check <strong>Enable daily pre-processor</strong> to split the daily view into space heating and domestic hot water, giving you separate COP and energy figures for each mode.</p>
+
+<p>Click <strong>Launch App</strong> and enjoy ;)</p>
+
+<p><img src="home-assistant-emoncms-myheatpump-dashboard.png" alt="My Heatpump dashboard in Home Assistant" /></p>
+
+<h3 id="tips">Tips</h3>
+
+<ul>
+  <li>Click on a bar in the daily chart to jump to the power chart for that day.</li>
+  <li>Click <strong>COP</strong> in the stats panel to toggle between <em>COP 30 min</em> (smoothed average) and <em>COP Now</em> (instantaneous).</li>
+  <li>For deeper analysis, the app also tracks data quality percentages for each feed, so you can see if gaps in data are affecting your COP figures.</li>
+</ul>]]></content><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><category term="ESPHome" /><category term="Altherma" /><category term="Emoncms" /><category term="Home Assistant" /><category term="Energy Monitoring" /><summary type="html"><![CDATA[Set up ESPHome Altherma with Emoncms for long-term heat pump performance monitoring and energy dashboards in Home Assistant.]]></summary></entry><entry><title type="html">Proxmox Network Isolation - Isolate LXC Container from Local Network</title><link href="/2026/proxmox-network-isolation/" rel="alternate" type="text/html" title="Proxmox Network Isolation - Isolate LXC Container from Local Network" /><published>2026-04-14T00:00:00+02:00</published><updated>2026-04-14T00:00:00+02:00</updated><id>/2026/proxmox-network-isolation</id><content type="html" xml:base="/2026/proxmox-network-isolation/"><![CDATA[<p>When you run a service like WordPress in your homelab and expose it to the internet (via Cloudflare Tunnel, reverse proxy, etc.), you’re creating an entry point that the outside world can reach. By default, this container sits on your home network alongside other devices, and if it’s compromised, an attacker could pivot to attack your NAS, Proxmox host, or other devices on the LAN.</p>
 
 <p>The practical question is: does your WordPress container actually <em>need</em> access to your internal network? The answer is almost always no. WordPress needs internet access to fetch updates, plugins, and reach Cloudflare. But it has no legitimate reason to reach other devices on your LAN.</p>
 
