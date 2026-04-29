@@ -1,7 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://jjohnsen.no/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jjohnsen.no/" rel="alternate" type="text/html" /><updated>2026-04-29T21:44:58+02:00</updated><id>https://jjohnsen.no/feed.xml</id><title type="html">jjohnsen.no</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">ESPHome Altherma + Emoncms Setup Guide</title><link href="https://jjohnsen.no/2026/esphome-altherma-emoncms-setup-guide/" rel="alternate" type="text/html" title="ESPHome Altherma + Emoncms Setup Guide" /><published>2026-04-26T00:00:00+02:00</published><updated>2026-04-26T00:00:00+02:00</updated><id>https://jjohnsen.no/2026/esphome-altherma-emoncms-setup-guide</id><content type="html" xml:base="https://jjohnsen.no/2026/esphome-altherma-emoncms-setup-guide/"><![CDATA[<p>This guide walks you through connecting ESPHome Altherma to Emoncms in Home Assistant for long-term heat pump monitoring.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://jjohnsen.no/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jjohnsen.no/" rel="alternate" type="text/html" /><updated>2026-04-29T22:15:32+02:00</updated><id>https://jjohnsen.no/feed.xml</id><title type="html">jjohnsen.no</title><subtitle>Adventures in Azure and Power Platform</subtitle><author><name>Jan-Åge Johnsen</name><email>jan.age.johnsen@gmail.com</email></author><entry><title type="html">ESPHome Altherma + Emoncms Setup Guide</title><link href="https://jjohnsen.no/2026/esphome-altherma-emoncms-setup-guide/" rel="alternate" type="text/html" title="ESPHome Altherma + Emoncms Setup Guide" /><published>2026-04-26T00:00:00+02:00</published><updated>2026-04-26T00:00:00+02:00</updated><id>https://jjohnsen.no/2026/esphome-altherma-emoncms-setup-guide</id><content type="html" xml:base="https://jjohnsen.no/2026/esphome-altherma-emoncms-setup-guide/"><![CDATA[<p>This guide walks you through connecting ESPHome Altherma to Emoncms in Home Assistant for long-term heat pump monitoring.
 Both local and remote setups are covered — starting with local.</p>
 
-<p><img src="myheatpump-dashboard-overview.png" alt="ESPHome Altherma + Emoncms setup diagram" /></p>
+<p><img src="myheatpump-dashboard-overview.png" alt="MyHeatpump dashboard overview with COP, electric use, and heat output" title="MyHeatpump dashboard overview" /></p>
+<div class="hp-thumbs" aria-label="MyHeatpump dashboard gallery">
+  <img src="myheatpump-dashboard-power-chart.png" alt="MyHeatpump power chart with COP, flow and temperature traces" title="MyHeatpump power chart view" />
+  <img src="myheatpump-dashboard-detail-table.png" alt="MyHeatpump detail table showing min, max, mean and kWh metrics" title="MyHeatpump detail table view" />
+  <img src="myheatpump-dashboard-advanced-options.png" alt="MyHeatpump advanced options panel with immersion, flow rate and COP settings" title="MyHeatpump advanced options" />
+</div>
+
+<style>
+  .hp-thumbs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 0.75rem 0 1.25rem;
+  }
+
+  .hp-thumbs img {
+    width: 110px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #d0d7de;
+  }
+</style>
 
 <h2 id="why-use-emoncms-with-your-heat-pump">Why use Emoncms with your heat pump?</h2>
 
@@ -106,8 +128,8 @@ Search for <code class="language-plaintext highlighter-rouge">emoncms</code> and
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://raw.githubusercontent.com/jjohnsen/esphome-altherma/refs/heads/main/homeassistant/blueprints/emonncms_heatpump_sender.yaml
 </code></pre></div></div>
 
-<p>After import click on the tree dots and select <code class="language-plaintext highlighter-rouge">+Create Automation</code>:<br />
-<img src="image.png" alt="alt text" /></p>
+<p>After import click on the three dots and select <code class="language-plaintext highlighter-rouge">+Create Automation</code>:<br />
+<img src="home-assistant-blueprints-create-automation-menu.png" alt="Blueprint menu showing the Create automation action in Home Assistant" title="Home Assistant blueprint menu: Create automation" /></p>
 
 <h4 id="blueprint-inputs">Blueprint inputs</h4>
 
