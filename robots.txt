@@ -1,1 +1,9 @@
+User-agent: *
+Allow: /
+
+# Keep common private paths out of indexing if they are ever introduced.
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+
 Sitemap: https://jjohnsen.no/sitemap.xml
